@@ -1,0 +1,415 @@
+          {% extends 'base.html' %}
+          {% load static %}
+          {%block content%}
+          
+
+          <head>
+            <meta charset="utf-8">
+            <meta content="width=device-width, initial-scale=1.0" name="viewport">
+            <title>Users / Profile - NiceAdmin Bootstrap Template</title>
+            <meta content="" name="description">
+            <meta content="" name="keywords">
+
+            <!-- Favicons -->
+            <link href="{%static 'admincss/assets/img/favicon.png'%}" rel="icon">
+            <link href="{%static 'admincss/assets/img/apple-touch-icon.png'%}" rel="apple-touch-icon">
+
+            <!-- Vendor CSS Files -->
+            <link href="{%static 'admincss/assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+            <link href="{%static 'admincss/assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+            <link href="{%static 'admincss/assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+            <link href="{%static 'admincss/assets/vendor/quill/quill.snow.css'%}" rel="stylesheet">
+            <link href="{%static 'admincss/assets/vendor/quill/quill.bubble.css'%}" rel="stylesheet">
+            <link href="{%static 'admincss/assets/vendor/remixicon/remixicon.css'%}" rel="stylesheet">
+            <link href="{%static 'admincss/assets/vendor/simple-datatables/style.css'%}" rel="stylesheet">
+
+            <!--Template Main CSS File -->
+            <link href="{%static 'admincss/assets/css/style.css'%}" rel="stylesheet">
+
+            <!-- =======================================================
+            * Template Name: NiceAdmin
+            * Updated: Mar 09 2023 with Bootstrap v5.2.3
+            * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+            * Author: BootstrapMade.com
+            * License: https://bootstrapmade.com/license/
+            ======================================================== -->
+          </head>
+          <body>
+            {% if messages %}
+            {% for message in messages %}
+      
+            <div class="text-center text-danger pt-3"></button>
+                <strong>{{message}}</strong>
+            </div>
+            {% endfor %}
+            {%endif%}
+
+              <section class="section profile">
+                <div class="row">
+                  <div class="col-xl-4 pt-5">
+
+                    <div class="card bg-light">
+                      <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                        <img src="{%static 'admincss/assets/img/profile-img.jpg'%}" alt="Profile" class="rounded-circle">
+                        <h2>{{user.first_name}} {{user.last_name}}</h2>
+                        <div class="social-links mt-2">
+                          <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                        <div class="social-links mt-5">
+                            
+                        <div class="social-links mt-3">
+                          <p>PAGES</p>
+                        </div>
+                          <a href="">Your Wishlist</a><br />
+                          <div class="social-links mt-3">
+
+                          <a href="{%url 'cart'%}">Your Cart</a><br />
+                        </div>
+                          <div class="social-links mt-3">
+
+                          <a href="{%url 'order_details'%}">Your Orders</a><br />
+                        </div>
+                          <div class="social-links mt-3">
+
+                          <a href="">Track Orders</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+
+                  <!--starting on profile detailes-->
+                  <div class="col-xl-8 pt-5">
+                    <div class="card bg-light">
+                      <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+          
+                          <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                          </li>
+          
+                          <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                          </li>
+          
+                        
+          
+                          <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                          </li>
+          
+                        </ul>
+                        <div class="tab-content pt-2">
+          
+                          <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                            <h5 class="card-title">Profile Details</h5>
+
+                            <div class="row">
+                              <div class="col-lg-3 col-md-4 label ">Fist Name</div>
+                              <div class="col-lg-9 col-md-8">{{user.first_name}}</div>
+                            </div>
+          
+                            <div class="row">
+                              <div class="col-lg-3 col-md-4 label">Last Name</div>
+                              <div class="col-lg-9 col-md-8">{{user.last_name}}</div>
+                            </div>
+          
+                            <div class="row">
+                              <div class="col-lg-3 col-md-4 label">Phone</div>
+                              <div class="col-lg-9 col-md-8">{{user.mobile_number}}</div>
+                            </div>
+          
+                            <div class="row">
+                              <div class="col-lg-3 col-md-4 label">Email</div>
+                              <div class="col-lg-9 col-md-8">{{user.email}}</div>
+                            </div>
+                            
+
+
+                            {% for address in addresses %}
+                            <div class="row">
+                              <div class="col-lg-3 col-md-4 label" style="margin-top: 23px;">Address</div>
+                              <div class="col-lg-9 col-md-8">
+                                <div class="address-details">
+                                  <p>{{address.fullname}}{{address.mobile}}{{ address.house }} {{ address.city }} {{ address.state }} {{ address.country }} {{ address.zip }}</p>
+                                  
+                                  
+                            
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm " style ="margin_left:10px;"data-toggle="modal" data-target="#myModal{{ forloop.counter }}">
+                                  Edit Address
+                                </button>
+                                
+                                <td>
+                                  <a href="{% url 'deleteAddress' address.id %}" type="submit" class="btn btn-danger ml-3 btn-sm">Delete</a>
+                               </td>
+                              </div>
+                            </div> 
+                          {% endfor %}
+                          
+
+                          </div>
+                          {% for address in addresses%}
+
+                              <!-- edit prfile the modal HTML code -->
+                          <div class="modal" tabindex="-1" id="myModal{{forloop.counter}}">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">EDIT ADDRESS</h5>
+                                  <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form  action="{%url 'update_address' address.id%}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="mb-1">
+                                      <label for="fullname" class="form-label">Fullname</label>
+                                      <input type="text" class="form-control" id="fullname" name="fullname" value="{{address.fullname}}">
+                                    </div>
+                                    <div class="mb-1">
+                                      <label for="mobile" class="form-label">Mobile</label>
+                                      <input type="text" class="form-control" id="mobile" name="mobile"value="{{address.mobile}}">
+                                    </div>
+                                    <div class="mb-1">
+                                      <label for="house1" class="form-label">House</label>
+                                      <input type="text" class="form-control" id="house1" name="house1" value="{{address.house}}">
+                                    </div>
+                                    <div class="mb-1">
+                                      <label for="city1" class="form-label">City</label>
+                                      <input type="text" class="form-control" id="city1" name="city1" value="{{address.city}}">
+                                    </div>
+                                    <div class="mb-1">
+                                      <label for="state1" class="form-label">State</label>
+                                      <input type="text" class="form-control" id="state1" name="state1" value="{{address.state}}">
+                                    </div>
+                                    <div class="mb-1">
+                                      <label for="zip1" class="form-label">ZIP</label>
+                                      <input type="text" class="form-control" id="zip1" name="zip1" value="{{address.zip}}">
+                                    </div>
+                                    <div class="mb-1">
+                                      <label for="country1" class="form-label">Country</label>
+                                      <input type="text" class="form-control" id="country1" name="country1" value="{{address.country}}">
+                                    </div>
+                                    <!-- Add more fields or customize the form as needed -->
+                                </div>
+                                <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" id="saveChangesButton">Save changes</button>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div> 
+                          
+                          {%endfor%}
+                          <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+                            <!-- Profile Edit Form -->
+                            <form method="POST">
+                              {% csrf_token %}
+                              <div class="row mb-3">
+                                <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <img src="{% static 'admincss/assets/img/profile-img.jpg' %}" alt="Profile">
+                                  <div class="pt-2">
+                                    <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
+                                    <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                  </div>
+                                </div>
+                              </div>
+          
+                              <div class="row mb-3">
+                                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="first_name" type="text" class="form-control" id="fullName" value="{{ user.first_name }}">
+                                </div>
+                              </div>
+          
+                              <div class="row mb-3">
+                                <label for="Address" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="last_name" type="text" class="form-control" id="Address" value="{{ user.last_name }}">
+                                </div>
+                              </div>
+          
+                              <div class="row mb-3">
+                                <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="mobile_number" type="text" class="form-control" id="Phone" value="{{ user.mobile_number }}">
+                                </div>
+                              </div>
+
+                              <div class="row mb-3">
+                                <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="email" type="email" class="form-control" id="Email" value="{{ user.email }}">
+                                </div>
+                              </div>
+                              {%for address in addresses%}
+                              <div class="row mb-3">
+                                <label for="address" class="col-md-4 col-lg-3 col-form-label">Address:</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="address" type="text" class="form-control" id="address" value=" {{ address.fullname }} {{ address.mobile }} {{ address.house }}  {{ address.city }} {{ address.state }}  {{ address.country }} {{ address.zip }}">
+                                </div>
+                              </div>
+                              {%endfor%}
+          
+                             
+          
+                              <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+
+                              </div>
+                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Add Address
+                              </button>
+                            </form><!-- End Profile Edit Form -->
+                            
+                          </div>
+                             <!-- Add the modal HTML code -->
+                             <div class="modal" tabindex="-1" id="exampleModal">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title">ADD ADDRESS</h5>
+                                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form action="{% url 'add_address' %}" method="POST">
+                                      {% csrf_token %}
+                                      <div class="mb-1">
+                                        <label for="fullname" class="form-label">Fullname</label>
+                                        <input type="text" class="form-control" id="fullname" name="fullname">
+                                      </div>
+                                      <div class="mb-1">
+                                        <label for="mobile" class="form-label">Mobile</label>
+                                        <input type="text" class="form-control" id="mobile" name="mobile">
+                                      </div>
+                                      <div class="mb-1">
+                                        <label for="house1" class="form-label">House</label>
+                                        <input type="text" class="form-control" id="house1" name="house1">
+                                      </div>
+                                      <div class="mb-1">
+                                        <label for="city1" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="city1" name="city1">
+                                      </div>
+                                      <div class="mb-1">
+                                        <label for="state1" class="form-label">State</label>
+                                        <input type="text" class="form-control" id="state1" name="state1">
+                                      </div>
+                                      <div class="mb-1">
+                                        <label for="zip1" class="form-label">ZIP</label>
+                                        <input type="text" class="form-control" id="zip1" name="zip1">
+                                      </div>
+                                      <div class="mb-1">
+                                        <label for="country1" class="form-label">Country</label>
+                                        <input type="text" class="form-control" id="country1" name="country1">
+                                      </div>
+                                      <!-- Add more fields or customize the form as needed -->
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" id="saveChangesButton">Save changes</button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>  
+                           
+           
+          
+                          <div class="tab-pane fade pt-3" id="profile-change-password">
+                            <!-- Change Password Form -->
+                            <form action="{%url 'change_password'%}"method ="POST">
+                              {%csrf_token%}
+
+                           
+                              <div class="row mb-3">
+                                <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="password" type="password" class="form-control" id="currentPassword">
+                                </div>
+                              </div>
+          
+                              <div class="row mb-3">
+                                <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                </div>
+                              </div>
+          
+                              <div class="row mb-3">
+                                <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                </div>
+                              </div>
+          
+                              <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Change Password</button>
+                              </div>
+
+                            </form><!-- End Change Password Form -->
+          
+                          </div>
+                         
+                         
+
+
+          
+                        </div><!-- End Bordered Tabs -->
+          
+                      </div>
+                    </div>
+          
+                  </div>
+                </div>
+                </section>
+                  
+
+
+                        
+          <style>
+            .address-details {
+            display: flex;
+            align-items: center;
+            }
+            
+            .address-details p {
+            margin-right: 152px; 
+            margin-top: 20px;
+            }
+            
+            </style>
+                                
+   
+
+            <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+            <!-- Vendor JS Files -->
+            <script src="{%static 'admincss/assets/vendor/apexcharts/apexcharts.min.js'%}"></script>
+            <script src="{%static 'admincss/assets/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+            <script src="{%static 'admincss/assets/vendor/chart.js/chart.umd.js'%}"></script>
+            <script src="{%static 'admincss/assets/vendor/echarts/echarts.min.js'%}"></script>
+            <script src="{%static 'admincss/assets/vendor/quill/quill.min.js'%}"></script>
+            <script src="{%static 'admincss/assets/vendor/simple-datatables/simple-datatables.js'%}"></script>
+            <script src="{%static 'admincss/assets/vendor/tinymce/tinymce.min.js'%}"></script>
+            <script src="{%static 'admincss/assets/vendor/php-email-form/validate.js'%}"></script>
+
+            <!-- Template Main JS File -->         
+            <!-- Include dependencies -->
+            {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> {% endcomment %}
+
+            <!-- Your custom JavaScript code -->
+
+          </body>
+            
+
+
+          {%endblock content%}

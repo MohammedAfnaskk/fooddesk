@@ -1,0 +1,136 @@
+
+{%extends 'base.html' %}
+{%load static%}
+{%block content%}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"/>
+    <div class="hero-wrap hero-bread" style="background-image: url('{%static 'foodiecss/images/add_1.jpg'%}');">
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+          	<p class="breadcrumbs"><span class="mr-2"><a>Home</a></span> <span>Products</span></p>
+            <h1 class="mb-0 bread">Products</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <section class="ftco-section">
+    	<div class="container">
+			
+    		<div class="row justify-content-center">
+    			<div class="col-md-10 mb-5 text-center">
+    				<ul class="product-category">
+    					<li><a href="#" class="active">All</a></li>
+    					<li><a href="#">Burger</a></li>
+    					<li><a href="#">Pizza</a></li>
+    					<li><a href="#">Juice</a></li>
+    					<li><a href="#">Broasted</a></li>
+						
+    				</ul>
+					
+    			</div>
+				
+    		</div>
+
+			{% if prod %}
+    		<div class="row">
+				{% for i in prod %}
+    			<div class="col-md-6 col-lg-3 ftco-animate product_data">
+    				<div class="product">
+    					<a href="{%url 'singleproduct' i.id%}" class="img-prod"><img class="img-fluid" src="{{i.image.url}}" alt="Colorlib Template">
+    					</a>
+    					<div class="text py-3 pb-4 px-3 text-center">
+    						<h3><a>{{i.product_name}}</a></h3>
+    						<div class="d-flex">
+    							<div class="pricing">
+		    						<p class="price"><span class="mr-2 price-dc"></span><span class="price-sale">₹
+										{{i.product_price}}</span></p>
+		    					</div>
+	    					</div>
+							{% csrf_token %}
+							<input type='hidden' value="{{i.id}}" class="prod_id">
+	    					<div class="bottom-area d-flex px-3 ">
+	    						<div class="m-auto d-flex">
+	    							<a  class="buy-now d-flex justify-content-center align-items-center mx-3">
+	    								<span><i class="ion-ios-cart addToCartBtn"></i></span>
+	    							</a>
+	    							<a  class="heart d-flex justify-content-center align-items-center ">
+	    								<span><i class="ion-ios-heart addToWishlist"></i></span>
+	    							</a>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+				{% endfor %}	
+    		</div>
+			{% else %}
+			<h2>No products found</h2>
+			{% endif %}
+
+    <div class="row mt-5">
+      <div class="col text-center">
+            <div class="block-27">
+		 {% if prod.has_other_pages %}
+              <ul class ="pagination" style="
+			  margin-left: 451px;">
+				{%if prod.has_previous %}
+                <li><a href="?page={{prod.previous_page_number}}">&lt;</a></li>
+				{%else %}
+				<li class ="disabled"><a href="#">&lt;</a></li>
+			    {%endif%}
+				{% for i in prod.paginator.page_range %}
+				{% if prod.number == i %}
+                <li class="active"><span>{{i}}</span></li>
+				{% else %}
+                <li><a href="?page={{i}}">{{i}}</a></li>
+				{% endif %}
+				{% endfor %}
+				{% if prod.has_next %}
+                <li><a href="?page={{prod.next_page_number}}">&gt;</a></li>
+				{% else %}
+				<li class="disabled"><a href="#">&gt;</a></li>
+                {% endif %}
+              </ul>
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+    </div>
+    </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+
+<script>
+ 
+
+$(document).ready(function() {
+	$(".addToCartBtn").click(function(event) {
+		event.preventDefault();
+
+		var product_id = $(this).closest('.product_data').find('.prod_id').val();
+		var product_qty = 1;
+		var token = $('input[name=csrfmiddlewaretoken]').val();
+		$.ajax({
+			url: '/cart/addtocart/',
+			method: 'POST',
+			data: {
+				'product_id': product_id,
+				'product_qty': product_qty,
+				'csrfmiddlewaretoken': token
+			},
+			success: function(response) {
+				// Handle the successful response here
+				console.log(response);
+				alertify.success(response.status);
+			},
+		});
+	});
+}); 
+</script>
+
+
+{%endblock content%}
+
+		 

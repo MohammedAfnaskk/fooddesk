@@ -1,0 +1,600 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style>
+  .address-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-title {
+    margin-bottom: 1rem;
+  }
+
+  .address-details {
+    padding: 1rem;
+  }
+
+  .form-group {
+    margin-top: 20px;
+  }
+
+  .modal-body {
+    max-height: 300px; /* Adjust the value as needed */
+    overflow-y: auto;
+  }
+
+  .total-price {
+    display: flex;
+    align-items: center;
+  }
+
+  .total-price span {
+    margin-right: 10px;
+  }
+
+  .discount-line,
+  .total-line {
+    margin-bottom: 5px;
+  }
+
+  #discount,
+  #grand_total {
+    font-weight: bold;
+  }
+
+  .total-line span {
+    display: inline-block;
+  }
+
+  .grand_total {
+    display: none;
+  }
+</style>
+
+<div>
+  <div class="container">
+    {% if not cart %}
+    <h2 class="text-center">
+      Thank you, Your order has been successfully placed
+    </h2>
+    <br />
+    <br />
+    <div class="text-center">
+      <a href="{%url 'shop'%}" class="btn btn-primary font-weight-bold"
+        >Continue Shopping</a
+      >
+    </div>
+    {% else %}
+  </div>
+  <form action="{% url 'place_order'%}" method="POST">
+    {% csrf_token %}
+    <div
+      class="hero-wrap hero-bread"
+      style="background-image: url('{%static 'foodiecss/images/add_1.jpg'%}')"
+    >
+      <div class="container">
+        <div
+          class="row no-gutters slider-text align-items-center justify-content-center"
+        >
+          <div class="col-md-9 text-center">
+            <p class="breadcrumbs">
+              <span class="mr-2"><a href="index.html">Home</a></span>
+              <span>Checkout</span>
+            </p>
+            <h1 class="mb-0 bread">Checkout</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row md -8justify-content-center">
+          <div class="col-xl-7">
+            <form action="#" class="billing-form">
+              <h3 class="mb-4 billing-heading">Billing Details</h3>
+
+              {% for i in address %}
+              <div
+                class="card ml-3 address-card"
+                style="width: 30rem;{% if forloop.first %} display: block;{% else %} display: none;{% endif %}"
+              >
+                <div class="card-body">
+                  <h5 class="card-title">Address {{ forloop.counter }}</h5>
+                  <div class="address-details">
+                    <div class="row">
+                      <div class="col fullname">First Name: {{ i.fullname }}</div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col mobile">Mobile: {{ i.mobile }}</div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col house">House: {{ i.house }}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col city">City: {{ i.city }}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col state">State: {{ i.state }}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col country">Country: {{ i.country }}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col zip">ZIP: {{ i.zip }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+
+              <div class="form-group">
+                <div class="col-md-4">
+                  <label for="address-toggle">Select Address</label>
+                  <select
+                    class="form-control"
+                    id="address-toggle"
+                    name="address-toggle"
+                  >
+                    {% for i in address %}
+                    <option
+                      value="{{ forloop.counter0 }}"
+                      {%
+                      if
+                      forloop.first
+                      %}selected{%
+                      endif
+                      %}
+                    >
+                      Address {{ forloop.counter }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="w-100"></div>
+              <div class="col-md-12">
+                <div class="form-group mt-4">
+                  <div class="radio">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                          <div class="custom-control custom-radio">
+                            <input
+                              type="radio"
+                              id="createAddressRadio"
+                              name="optradio"
+                              class="custom-control-input"
+                              data-toggle="modal"
+                              data-target="#myModal"
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="createAddressRadio"
+                              >Create an Address?</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <!-- END -->
+          </div>
+
+          <div class="col-lg-5 cart-wrap">
+            <h4>Coupon Code</h4>
+
+            <form
+              action="{%url 'apply_coupon'%}"
+              id="coupon-form"
+              class="info"
+              method="POST"
+            >
+              {%csrf_token%}
+
+              <form action="#" class="subscribe-form">
+                <div class="form-group d-flex">
+                  <input
+                    type="text"
+                    id="coupon-input"
+                    class="form-control text-left px-3"
+                    placeholder="coupon code"
+                  />
+                  <input
+                    type="submit"
+                    value="Apply Coupon"
+                    class="submit px-3"
+                    style="background: #ff8511"
+                  />
+                </div>
+              </form>
+            </form>
+
+            <div class="col-lg-4-md-12 d-flex mb-5 pt-5">
+              <div class="cart-detail cart-total p-3 p-md-4">
+                <h3 class="billing-heading mb-4">Cart Total</h3>
+                <p class="d-flex">
+                  <span>Subtotal</span>
+                  <span id="sub_total">{{subtotal1}}</span>
+                </p>
+                <p class="d-flex">
+                  <span>Tax</span>
+                  <span id="tax_field">{{tax1}}</span>
+                </p>
+
+                <hr />
+                <p class="d-flex total-price">
+                  <span>Grand Total</span>
+                  {% if usercoupon %}
+                </p>
+
+                <p class="discount-line">
+                  <span id="discount"
+                    >Discount {{ usercoupon.coupon.discount }} %
+                  </span>
+                </p>
+                <span class="total-line"
+                  >Total
+                  <span id="grand_total" style="margin-left: 160px"
+                    >{{ usercoupon.total_price }}</span
+                  ></span
+                >
+                {% else %}
+                <span id="grand_total">{{totalamount1}}</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row mt-5">
+              <div class="col-md-12">
+                <div class="cart-detail p-3 p-">
+                  <h3 class="billing-heading mb-4">Payment Method</h3>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <div class="radio">
+                        <label
+                          ><input type="radio" name="payment_mode"  disabled  class="mr-2" />
+                          Direct Bank Tranfer</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <div class="radio">
+                        <input
+                          type="radio"
+                          name="payment_mode"
+                          value="COD"
+                          class="mr-2"
+                         />
+                        Cash On Delivery
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <div class="radio">
+                        <label
+                          ><input type="radio" name="payment_mode" disabled class="mr-2" />
+                          Paypal</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <div class="checkbox">
+                        <label
+                          ><input type="checkbox" value="" class="mr-2" /> I
+                          have read and accept the terms and conditions</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <button
+                    class="btn btn-primary "
+                    id="placeOrderButton"
+                  >
+                    Place an order
+                  </button>
+                  <button type="button" class="btn btn-success payWithRazorpay w-100 mt-2">Razery Pay</button>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- .col-md-8 -->
+      </div>
+
+
+      {%endif%}
+
+      <!-- add address checkoutpage the modal HTML code -->
+      <div class="modal" tabindex="-1" id="myModal{{forloop.counter}}">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">ADD ADDRESS</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-mdb-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form action="{%url 'add_address_checkout' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-1">
+                  <label for="fullname" class="form-label">Fullname</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullname"
+                    name="fullname"
+                    value="{{address.fullname}}"
+                  />
+                </div>
+                <div class="mb-1">
+                  <label for="mobile" class="form-label">Mobile</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="mobile"
+                    name="mobile"
+                    value="{{address.mobile}}"
+                  />
+                </div>
+                <div class="mb-1">
+                  <label for="house1" class="form-label">House</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="house1"
+                    name="house1"
+                    value="{{address.house}}"
+                  />
+                </div>
+                <div class="mb-1">
+                  <label for="city1" class="form-label">City</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="city1"
+                    name="city1"
+                    value="{{address.city}}"
+                  />
+                </div>
+                <div class="mb-1">
+                  <label for="state1" class="form-label">State</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="state1"
+                    name="state1"
+                    value="{{address.state}}"
+                  />
+                </div>
+                <div class="mb-1">
+                  <label for="zip1" class="form-label">ZIP</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="zip1"
+                    name="zip1"
+                    value="{{address.zip}}"
+                  />
+                </div>
+                <div class="mb-1">
+                  <label for="country1" class="form-label">Country</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="country1"
+                    name="country1"
+                    value="{{address.country}}"
+                  />
+                </div>
+                <!-- Add more fields or customize the form as needed -->
+
+                <div class="modal-footer">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveChangesButton"
+                  >
+                    Save changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#address-toggle").change(function () {
+      var selectedIndex = $(this).val();
+      $(".address-card").hide();
+      $(".address-card").eq(selectedIndex).show();
+    });
+  });
+
+  // #AJAX coupon
+
+  $(function () {
+    $("#coupon-form").submit(function (event) {
+      event.preventDefault();
+      var grand_total = $(this)
+        .closest(".product_data")
+        .find(".grand_total")
+        .val();
+      var couponCode = $("#coupon-input").val();
+      var token = $("input[name=csrfmiddlewaretoken]").val();
+      $.ajax({
+        method: "POST",
+        url: "{%url 'apply_coupon' %}",
+        data: {
+          coupon_code: couponCode,
+          grand_total: grand_total,
+
+          csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        success: function (response) {
+          console.log(response);
+
+          if (
+            response.status === "Field is blank" ||
+            response.status === "Coupon does not exist" ||
+            response.status === "Coupon already used!" ||
+            response.status === "You are not eligible for this coupon"
+          ) {
+            swal("Error!", response.status, "error");
+            $(".cartdata").load(location.href + " .cartdata");
+          } else if (response.status === "Coupon added successfully") {
+            swal("Congratulations!.", response.status, "success");
+            $(".cartdata").load(location.href + " .cartdata");
+          } else {
+            swal("Error!", response.status, "error");
+            $(".cartdata").load(location.href + " .cartdata");
+          }
+        },
+      });
+    });
+  });
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  $(document).ready(function () {
+
+    $('.payWithRazorpay').click(function (e) {
+      e.preventDefault();
+      var fname = $("[name='fullname']").val()
+      var mobile = $("[name='mobile']").val()
+      var email = $("[name='email']").val()
+      var token = $("[name='csrfmiddlewaretoken']").val();
+      var selectedAddressId = $("select[name='address-toggle']").val();
+
+      
+        $.ajax({
+           method:"GET",
+           url:"{%url 'proceedtopay'%}",
+           success: function(response) {
+            
+            var options = {
+              "key": "rzp_test_ApAYbEmuLuSrje", // Enter the Key ID generated from the Dashboard
+              "amount": response.total_price*100,//response.total_price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+              "currency": "INR",
+              "name": "FOODDESK",
+              "description": "Thank you for buying with us",
+              "image": "https://example.com/your_logo",
+              //"order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+              "handler": function (responseb){
+                alert(responseb.razorpay_payment_id);
+                  data = {
+                    
+                    "payment_method" : "Razorpay",
+                    "payment_id" : responseb.razorpay_payment_id,
+                    "address": selectedAddress,
+                    csrfmiddlewaretoken: token
+                    
+                  }
+                    $.ajax({
+                      method:"POST",
+                      url:"/checkout/placeorder/",
+                      data: data,
+                      success: function (responsec) {
+                        console.log(responsec)
+                        swal("Congratulations!", responsec.status,"success").then((value) => {
+                            window.location.href = '/orders/'
+                        });
+                      }
+
+                  });
+              },
+              "handler": function (responseb){
+                alert(responseb.razorpay_payment_id);
+                  data = {
+                    
+                    "payment_mode" : "Razorpay",
+                    "payment_id" : responseb.razorpay_payment_id,
+                    "address-toggle": selectedAddressId,
+                    csrfmiddlewaretoken: token
+                    
+                  }
+                    $.ajax({
+                      method:"POST",
+                      url:"{%url 'place_order'%}",
+                      data: data,
+                      success: function (responsec) {
+                        console.log(responsec,'daxooo')
+                        swal("Congratulations!", responsec.status,"success").then((value) => {
+                            window.location.href = '/order/order_details/'
+                        });
+                      }
+
+                  });
+              },
+               "prefill": {
+                  "name": fname,
+                  "email" : email,
+                  'contact' : mobile,
+              }, 
+              
+              "theme": {
+                  "color": "#3399cc"
+              }
+          };
+          var rzp1 = new Razorpay(options);
+          rzp1.on('payment.failed', function (response){
+                  alert(response.error.code);
+                  alert(response.error.description);
+                  alert(response.error.source);
+                  alert(response.error.step);
+                  alert(response.error.reason);
+                  alert(response.error.metadata.order_id);
+                  alert(response.error.metadata.payment_id);
+          });
+          rzp1.open();
+            console.log(response);
+
+           }
+        });
+ 
+      
+
+
+
+
+
+      
+    });
+
+  });
+</script>
+
+{% endblock %}

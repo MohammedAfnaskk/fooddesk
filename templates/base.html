@@ -1,0 +1,370 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fooddesk</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'foodiecss/css/open-iconic-bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'foodiecss/css/animate.css'%}">
+    
+    <link rel="stylesheet" href="{% static 'foodiecss/css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{%static 'foodiecss/css/owl.theme.default.min.css'%}">
+    <link rel="stylesheet" href="{%static 'foodiecss/css/magnific-popup.css'%}">
+
+    <link rel="stylesheet" href="{%static 'foodiecss/css/aos.css'%}">
+
+    <link rel="stylesheet" href="{%static 'foodiecss/css/ionicons.min.css'%}">
+
+    <link rel="stylesheet" href="{%static 'foodiecss/css/bootstrap-datepicker.css'%}">  
+    <link rel="stylesheet" href="{%static 'foodiecss/css/jquery.timepicker.css'%}">
+
+    
+    <link rel="stylesheet" href="{%static 'foodiecss/css/flaticon.css'%}">
+    <link rel="stylesheet" href="{%static 'foodiecss/css/icomoon.css'%}">
+    <link rel="stylesheet" href="{%static 'foodiecss/css/style.css' %}">
+      <!-- Other meta tags and stylesheets -->
+    <link rel="stylesheet" href="{%static 'foodiecss/css/font-awesome/css/all.min.css'%}">
+    
+    
+  </head>
+  
+  <body class="goto-here">
+		<div class="py-1 "style='background-color:#ff8511;'>
+    	<div class="container">
+    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+	    		<div class="col-lg-12 d-block">
+		    		<div class="row d-flex">
+		    			<div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+						    <span class="text">+ 91 9746432088</span>
+					    </div>
+					    <div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+						    <span class="text">foodieshop@gmail.com</span>
+					    </div>
+					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+						    <span class="text">1hr or 30min on delivery time</span>
+					    </div>
+				    </div>
+			    </div>
+		    </div>
+		  </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-white ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="index.html">Fooddesk</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+
+	      <div class="collapse navbar-collapse ml-5 " id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item active"><a class="nav-link"href="{%url 'home'%}">Home</a></li>
+	          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04">
+              	<a class="dropdown-item" href="{%url 'shop'%}">Shop</a>
+              	<a class="dropdown-item" href="{%url 'wishlist'%}">Wishlist</a>
+                  <a class="dropdown-item" href="checkout.html">Payment</a>
+              </div>
+            </li>
+ 	          <li class="nav-item"><a href="{%url 'order_details'%}" class="nav-link">Orders</a></li>
+             <li class="nav-item cta cta-colored">
+            
+              <a href="{% url 'cart' %}" class="nav-link">
+                <span class="icon-shopping_cart"></span>
+                [{{ cart.count }}]
+              </a>
+            </li>
+          </ul>
+	    </div>
+      <form class="search" action ="{%url 'search'%}" method="GET">
+       <div class="d-flex justify-content-center h-100 ml-5">
+        <div class="search">
+          <input type="text" class="search-input" placeholder="Search..." name="keyword">
+          <a class="search-icon" type="submit">
+          <i class="fa fa-search"></i>
+          </a> 
+        </div>
+      </div>
+    </form>
+      
+          
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+ 	          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04">
+              	<a class="dropdown-item" href="{%url 'userprofile'%}">Profile</a>
+              	<a class="dropdown-item" href="{%url 'wishlist'%}">Wishlist</a>
+                <a class="dropdown-item" href="{%url 'login'%}">Login</a>
+                 <a class="dropdown-item" href="{%url 'logout'%}">Logout</a>
+              </div>
+            </li>
+          </ul>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+    {% block content %}
+
+    {% endblock %}
+    <section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
+      <div class="container py-4">
+        <div class="row d-flex justify-content-center py-5">
+          <div class="col-md-6">
+          	<h2 style="font-size: 22px;" class="mb-0">Subcribe to our Newsletter</h2>
+          	<span>Get e-mail updates about our latest shops and special offers</span>
+          </div>
+          <div class="col-md-6 d-flex align-items-center">
+            <form action="#" class="subscribe-form">
+              <div class="form-group d-flex">
+                <input type="text" class="form-control" placeholder="Enter email address">
+                <input type="submit" value="Subscribe" class="submit px-3">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="ftco-footer ftco-section">
+      <div class="container">
+      	<div class="row">
+      		<div class="mouse">
+						<a href="#" class="mouse-icon">
+							<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+						</a>
+					</div>
+      	</div>
+        <div class="row mb-5">
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Vegefoods</h2>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-5">
+              <h2 class="ftco-heading-2">Menu</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">Shop</a></li>
+                <li><a href="#" class="py-2 d-block">About</a></li>
+                <li><a href="#" class="py-2 d-block">Journal</a></li>
+                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4">
+             <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Help</h2>
+              <div class="d-flex">
+	              <ul class="list-unstyled mr-l-5 pr-l-3 mr-4">
+	                <li><a href="#" class="py-2 d-block">Shipping Information</a></li>
+	                <li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>
+	                <li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>
+	                <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
+	              </ul>
+	              <ul class="list-unstyled">
+	                <li><a href="#" class="py-2 d-block">FAQs</a></li>
+	                <li><a href="#" class="py-2 d-block">Contact</a></li>
+	              </ul>
+	            </div>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+            	<h2 class="ftco-heading-2">Have a Questions?</h2>
+            	<div class="block-23 mb-3">
+	              <ul>
+	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+	              </ul>
+	            </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+  
+
+  <!-- loader -->
+  {% comment %} <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> {% endcomment %}
+
+  
+  <script src="{%static 'foodiecss/js/jquery.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/jquery-migrate-3.0.1.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/popper.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/bootstrap.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/jquery.easing.1.3.js'%}"></script>
+  <script src="{%static 'foodiecss/js/jquery.waypoints.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/jquery.stellar.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/owl.carousel.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/jquery.magnific-popup.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/aos.js'%}"></script>
+  <script src="{%static 'foodiecss/js/jquery.animateNumber.min.js'%}"></script>
+  <script src="{%static 'foodiecss/js/bootstrap-datepicker.js'%}"></script>
+  <script src="{%static 'foodiecss/js/scrollax.min.js'%}"></script>  
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+
+
+  <script>
+        // Function to check if an element is in the viewport
+  function isInViewport(element) {
+    var rect = element.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+
+  // Function to handle scroll event and add animation class to elements in viewport
+  function handleScroll() {
+    var elements = document.querySelectorAll('.ftco-animate');
+    Array.prototype.forEach.call(elements, function(element) {
+      if (isInViewport(element)) {
+        element.classList.add('animated');
+      }
+    });
+  }
+
+  // Attach scroll event listener to trigger animations
+  window.addEventListener('scroll', handleScroll);
+  // add to Cart js:
+  $(document).ready(function() {
+    $(".addToCartBtn").click(function(event) {
+      event.preventDefault();
+  
+      var product_id = $('.prod_id').val();
+      var product_qty = $(this).closest('.product_data').find('.qty-input').val();
+      var token = $('input[name=csrfmiddlewaretoken]').val();
+      $.ajax({
+        url: '/cart/addtocart/',
+        method: 'POST',
+        data: {
+          'product_id': product_id,
+          'product_qty': product_qty,
+          'csrfmiddlewaretoken': token
+        },
+        success: function(response) {
+          // Handle the successful response here
+          console.log(response);
+          alertify.success(response.status);
+        },
+      });
+    });
+  });
+
+  //add to wishlist:
+
+    $(".addToWishlist").click(function(event) {
+    event.preventDefault();
+
+    var product_id = $(this).closest('.product_data').find('.prod_id').val();
+    var token = $('input[name=csrfmiddlewaretoken]').val();
+
+    $.ajax({
+      url: '/add_to_wishlist/',
+      method: 'POST',
+      data: {
+        'product_id': product_id,
+        'csrfmiddlewaretoken': token
+      },
+      success: function(response) {
+        console.log(response)
+        alertify.success(response.status);
+
+        
+        
+      },
+    });
+  });
+  
+
+
+
+
+
+
+    </script>
+     <script src="{%static 'foodiecss/js/main.js'%}"></script>
+ 
+  <style>
+    .search {
+      position: relative;
+    }
+    
+    .search-input {
+      border: none;
+      border-bottom: 2px solid #ccc;
+      outline: none;
+      padding: 5px 10px;
+      font-size: 16px;
+      width: 200px;
+    }
+    
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      color: #aaa;
+      text-decoration: none;
+    }
+    
+    .search-icon i {
+      font-size: 20px;
+    }
+    
+    .search-input:focus {
+      border-bottom-color: #000;
+    }
+    
+    /* Optional: Add styling to adjust the size and color of the search bar container */
+    .search {
+      width: 203px;
+    }
+
+    .ftco-animate {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    }
+    
+    .ftco-animate.animated {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+    }
+    
+  </style>    
+ 
+  
+  </body>
+</html>

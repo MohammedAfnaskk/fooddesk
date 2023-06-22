@@ -1,0 +1,48 @@
+{%extends 'Admin/adminbase.html'%}
+{%block admin%}
+
+ 
+ 
+
+      <!-- Dark Table -->
+      <table class="table table-dark " style="    margin-top: 65px;
+      "  
+      >
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">image</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">category</th>
+            <th scope="col">Description</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for product in prod%}  
+          <tr>
+            <th scope="row">{{product.id}}</th>
+            <td><div style="width: 60px;" class="overflow-hidden">
+            <img class="w-100" src=" {{product.image.url}} " alt="">
+            </div>
+          </td>
+            <td>{{product.product_name}}</td>
+            <td>{{product.category}}</td>
+            <td>{{product.product_description}}</td>
+            <td>{{product.quantity}}</td>
+            <td>{{product.product_price}}</td>
+            <td>
+              <a href="{% url 'editproduct' product.id %}" class="btn btn-danger btn-sm">Edit</a>
+              <a href="{% url 'deleteproduct' product.id %}" type="submit" class="btn btn-success btn-sm">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <!-- End Dark Table -->
+
+    </div>
+  </div >
+{%endblock admin%}

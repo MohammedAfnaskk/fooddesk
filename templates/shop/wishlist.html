@@ -1,0 +1,184 @@
+{%extends 'base.html' %}
+{%load static%}
+{%block content%}
+ 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-fhfFhARgPdG+u3IvWq0roGnbbRAHUF/Zk/tI/aIhP1Ru7l62er1IvzWOBtr5iX84e9GCHjN3OMO4twBg0Bdwmw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+ 
+    <div class="hero-wrap hero-bread" style="background-image:  url('{%static 'foodiecss/images/add_1.jpg'%}');">
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9  text-center">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Wishlist</span></p>
+            <h1 class="mb-0 bread">My Wishlist</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section ftco-cart ">
+			<div class="container product_data">
+				<div class="row">
+    			<div class="col-md-12 ">
+    				<div class="cart-list wishdata">
+	    				<table class="table cartdata">
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>&nbsp;</th>
+						        <th>Product List</th>
+						        <th>&nbsp;</th>
+						        <th>Price</th>
+						        <th>Add To Cart</th>
+ 						      </tr>
+						    </thead>
+							<tbody>
+								{%if wishlist%}
+								{%for item in wishlist%}
+								<tr class="text-center ">
+										{% csrf_token %} 
+
+									<td>
+										<a class="deleteWishlist" data-wish_id="{{item.id}}">
+										<i class="fas fa-trash-alt" style="color: black;"></i>	
+ 										</a> 
+									  </td>
+									  								
+								  <td class="image-prod"><div class="img" style="background-image:url('{{ item.product.image.url }}');"></div></td>
+								  
+								  <td class="product-name">
+									<h3>{{ item.product.product_name }}</h3>
+									<p>{{item.product.product_discription}}</p>
+								  </td>
+								  
+								  <td class="price">{{item.product.product_price}}</td>
+								  {% csrf_token %}
+								  <input type='hidden' value="{{prod.id}}" class="prod_id">
+
+								  <td>
+									<i class="fas fa-shopping-cart cart-icon addToCartBtn "></i>
+								  </td>
+								  
+								</tr><!-- END TR-->
+							  </tbody>
+							  {% endfor %}
+							  {% endif %}
+							  
+							  
+						  </table>
+					  </div>
+    			</div>
+    		</div>
+			</div>
+		</section>
+
+		 
+<!-- Add this script tag to your HTML file -->
+
+ 
+
+     <!-- Add this script tag to your HTML file -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Tm3jblTIZ4ilFwNxDXe5zB6g54tMtyEdcTNn9yYqr4pN4wbH2ON23EzT4zWb2Fkk" crossorigin="anonymous"></script>
+ 
+	{% comment %} <script>
+	 document.addEventListener('DOMContentLoaded', function() {
+		  var wishlistLink = document.querySelector('.wishlist a');
+		  var heartIcon = wishlistLink.querySelector('i');
+		  var isClicked = false;
+	  
+		  wishlistLink.addEventListener('click', function(e) {
+			e.preventDefault();
+	  
+			if (isClicked) {
+			  heartIcon.style.color = 'black';
+			  heartIcon.style.background = '';
+			  heartIcon.style.border = '';
+			  isClicked = false;
+			} else {
+			  heartIcon.style.color = 'gray';
+			  heartIcon.style.background = 'white';
+ 			  isClicked = true;
+			}
+		  });
+		}); 
+	  </script> {% endcomment %}
+	  
+	  <style>
+		.wishlist a i {
+		  position: relative;
+		  font-size: 24px;
+		}
+ 	  
+		
+	.cart-icon {
+		color: black;
+	}
+	
+ 	.cart-icon:before {
+		font-size: 24px;
+	}
+
+  </style>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<script>
+ 
+
+ $(document).ready(function() {
+    $(".addToCartBtn").click(function(event) {
+      event.preventDefault();
+  
+      var product_id = $('.prod_id').val();
+      var product_qty = $(this).closest('.product_data').find('.qty-input').val();
+	  console.log(product_id"dexo")
+      var token = $('input[name=csrfmiddlewaretoken]').val();
+      $.ajax({
+        url: '/cart/addtocart/',
+        method: 'POST',
+        data: {
+          'product_id': product_id,
+          'product_qty': product_qty,
+          'csrfmiddlewaretoken': token
+        },
+        success: function(response) {
+          // Handle the successful response here
+          console.log(response);
+          alertify.success(response.status);
+        },
+      });
+    });
+  });
+</script>
+
+  <script>
+	$('.deleteWishlist').click(function(e) {
+    e.preventDefault();
+
+	var itemId = $(this).data('wish_id');
+	console.log(itemId,'daxo')
+    $.ajax({
+        method: "POST",
+        url: "{%url 'delete_wishlist_item'%}",
+        data: {
+            'itemId': itemId,
+            
+            csrfmiddlewaretoken: '{{csrf_token}}'
+        },
+     
+        success: function(response) {
+			location.reload();
+            console.log(response);
+            alertify.success(response.status);
+ 			
+        }
+    });
+});
+</script>
+
+{%endblock content%}

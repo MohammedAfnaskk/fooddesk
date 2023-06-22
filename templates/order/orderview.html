@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Order view</h1>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item active">Orders</li>
+          </ol>
+        </nav>
+      </div>
+      
+    <div class="container pb-4">
+        <div class="d-flex ">
+            <!-- <div class="col-md-6"> -->
+            <div class="card mt-3 mb-2 mr-3">
+                <div class="card-body">
+                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                <div class="address-info">
+                    <p><strong>House:</strong> {{ address.house }}</p>
+                    <p><strong>City:</strong> {{ address.city }}</p>
+                    <p><strong>State:</strong> {{ address.state }}</p>
+                    <p><strong>Country:</strong> {{ address.country }}</p>
+                    <p><strong>ZIP:</strong> {{ address.zip }}</p>
+                </div>
+                </div>
+            </div>
+            <!-- </div> -->
+            <!-- <div class="col-md-6 pl-1"> -->
+            <div class="card mt-3 mb-2">
+                <div class="card-body">
+                <h5 class="card-title">ORDER INFO</h5>
+                <div class="order-info">
+                    <p><strong>Tracking No:</strong> {{ order.tracking_no }}</p>
+                    <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+                    <p><strong>Payment Method:</strong> {{ order.payment_mode }}</p>
+                </div>
+                </div>
+            </div>
+            <!-- </div> -->
+        </div>
+    </div> 
+    
+      <div class="card n w-75 mx-auto ">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="table-header">Product</th>
+                  <th class="table-header">Name</th>
+                  <th class="table-header">Price</th>
+                  <th class="table-header">Quantity</th>
+                  <th class="table-header">Total</th>
+                  <th class="table-header">Status</th>
+                  <th class="table-header">Track</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in orderitems %}
+                <tr>
+                  <td class="img" style="background-image: url('{{ item.product.image.url }}');"></td>
+                  <td>{{ item.product.product_name }}</td>
+                  <td>{{ item.product.product_price }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ order.total_price }}</td>
+                  <td>{{ item.status }}</td>
+                  <td>
+                    <a href="#" class="tracking-button btn-sm">Track</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+</main>
+<style>
+    .card {
+      width: 75%;
+      margin: 0 auto;
+      margin-bottom: 10px;
+      background-color: #f8f9fa;
+      color: #333;
+    } 
+    .n{
+        width: 82% !important;
+    }
+ 
+    
+    .address-info {
+      margin-bottom: 20px;
+    }
+    
+    .order-info {
+      margin-top: 20px;
+    }
+    
+    .table-header {
+      font-weight: bold;
+    }
+    
+    .img {
+      width: fit-content;
+      height: 50px;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .tracking-button {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: #ff8511;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    
+    .tracking-button:hover {
+      background-color:  #fff;
+    }
+
+    .pagetitle {
+        background-color: #f8f9fa;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .pagetitle h1 {
+        margin: 20px;
+        font-size: 30px;
+        color: #333;
+    }
+    
+    .breadcrumb {
+        margin: 0;
+        padding: 1px;
+        list-style: none;
+    }
+    
+    .breadcrumb-item {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    
+    .breadcrumb-item a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .breadcrumb-item.active {
+        color:#ff8511 ;
+        font-weight:300;
+    }
+
+      
+    </style>
+    
+
+{% endblock %}
