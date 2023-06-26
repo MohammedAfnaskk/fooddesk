@@ -37,8 +37,7 @@
 								{%if wishlist%}
 								{%for item in wishlist%}
 								<tr class="text-center ">
-										{% csrf_token %} 
-
+								
 									<td>
 										<a class="deleteWishlist" data-wish_id="{{item.id}}">
 										<i class="fas fa-trash-alt" style="color: black;"></i>	
@@ -46,18 +45,19 @@
 									  </td>
 									  								
 								  <td class="image-prod"><div class="img" style="background-image:url('{{ item.product.image.url }}');"></div></td>
-								  
+								 
 								  <td class="product-name">
 									<h3>{{ item.product.product_name }}</h3>
 									<p>{{item.product.product_discription}}</p>
 								  </td>
 								  
-								  <td class="price">{{item.product.product_price}}</td>
+								  <td class="price">₹{{item.product.product_price}}</td>
+								  
 								  {% csrf_token %}
-								  <input type='hidden' value="{{prod.id}}" class="prod_id">
-
+								  
 								  <td>
-									<i class="fas fa-shopping-cart cart-icon addToCartBtn "></i>
+									<i class="fas fa-shopping-cart cart-icon addToCartBtn" data-prod_id="{{item.product.id}}"></i>
+									{% comment %} <input type='hidden' value="{{item.product.id}}" class="prod_id"> {% endcomment %}
 								  </td>
 								  
 								</tr><!-- END TR-->
@@ -134,9 +134,9 @@
     $(".addToCartBtn").click(function(event) {
       event.preventDefault();
   
-      var product_id = $('.prod_id').val();
-      var product_qty = $(this).closest('.product_data').find('.qty-input').val();
-	  console.log(product_id"dexo")
+      var product_id = $(this).data('prod_id');
+	  console.log(product_id,"daxo")
+      var product_qty = 1;
       var token = $('input[name=csrfmiddlewaretoken]').val();
       $.ajax({
         url: '/cart/addtocart/',
@@ -148,7 +148,7 @@
         },
         success: function(response) {
           // Handle the successful response here
-          console.log(response);
+          console.log(response); 
           alertify.success(response.status);
         },
       });

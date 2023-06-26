@@ -108,7 +108,7 @@
                 <td class="product-name">
                   <h3>{{ item.product.product_name }}</h3>
                 </td>
-                {% comment %}
+                {% comment %} 
                 <td class="price">{{ item.product.product_price }}</td>
                 {% endcomment %}
                 <td class="quantity">
@@ -125,8 +125,7 @@
                   >
                     <div class="input-group-prepend">
                       <button
-                        data-price="{{ item.variantion.price }}"
-                        class="btn btn-sm btn-outline-secondary btn-minus changeQuantity"
+                         class="btn btn-sm btn-outline-secondary btn-minus changeQuantity"
                       >
                         <i class="fa fa-minus"></i>
                       </button>
@@ -141,8 +140,7 @@
                     />
                     <div class="input-group-append">
                       <button
-                        data-price="{{ item.variant.price }}"
-                        class="btn btn-sm btn-outline-secondary btn-plus changeQuantity"
+                         class="btn btn-sm btn-outline-secondary btn-plus changeQuantity"
                       >
                         <i class="fa fa-plus"></i>
                       </button>
@@ -154,7 +152,7 @@
                   {% endif %}
                 </td>
 
-                <td class="price">{{ item.product.product_price }}</td>
+                <td class="price">₹{{ item.product.product_price }}</td>
               </tr>
               {% endfor %} {% endif %}
             </tbody>
@@ -172,18 +170,18 @@
         <h3>Cart Totals</h3>
         <p class="d-flex">
           <span>Subtotal</span>
-          <span id="sub_total">{{subtotal}}</span>
+          <span id="sub_total">₹{{subtotal}}</span>
         </p>
         <p class="d-flex">
           <span>Tax</span>
-          <span id="tax_field">{{tax}}</span>
+          <span id="tax_field">₹{{tax}}</span>
         </p>
 
         <hr />
         <p class="d-flex total-price">
           <span>Grand Total</span>
 
-          <span id="grand_total">{{ totalamount }}</span>
+          <span id="grand_total">{{totalamount }}</span>
           <input
             type="hidden"
             class="grand_total"
@@ -255,8 +253,8 @@
         alertify.success(response.status);
 
         var sub_total = parseInt(response.sub_total);
-        document.getElementById("sub_total").textContent = sub_total;
-        document.getElementById("tax_field").textContent = sub_total * 0.05;
+        document.getElementById("sub_total").textContent = '₹' + sub_total;
+        document.getElementById("tax_field").textContent ='₹' +  sub_total * 0.05;
         document.getElementById("grand_total").textContent =
           sub_total + sub_total * 0.05;
         document.getElementById(

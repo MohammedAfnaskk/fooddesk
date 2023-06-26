@@ -162,23 +162,4 @@ def deletecoupon(request,delete_id):
     coupon.delete()
     return redirect('admincoupon')
 
-def search_coupon(request):
-    if not request.user.is_superuser:
-        return redirect('adminsignin')
-    if 'keyword' in request.GET:
-        keyword = request.GET['keyword']
-        if keyword:
-            coupon = Coupon.objects.filter(coupon_code__icontains=keyword).order_by('id')
-            if coupon.exists():
-                context = {
-                    'coupon': coupon,
-                }
-                return render (request,'coupon/coupon.html',context)
-            else:
-                message = "Coupon not found."
-                return render(request,'coupon/coupon.html', {'message': message})
-        else:
-            message = "Please enter a valid search keyword"
-            return render(request, 'coupon/coupon.html', {'message': message})
-    else:
-        return render(request, 'error/index.html')
+ 

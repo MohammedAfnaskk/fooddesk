@@ -1,6 +1,92 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 
+ 
+
 <style>
+  /*the complete project is in the following link:
+  https://github.com/vkive/coupon-code.git
+  Follow me on Codepen
+  */
+  *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'poppins', sans-serif;
+      
+  }
+  .container1{
+      width: 75%;
+      height: 54vh;
+      background: #f0fff3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+  }
+  .coupon-card{
+      background: linear-gradient(135deg, #7158fe, #9d4de6);
+      color: #fff;
+      text-align: center;
+      padding: 40px 80px;
+      border-radius: 15px;
+      box-shadow: 0 10px 10px 0 rgba(0,0,0,0.15);
+      position: relative;
+  
+  }
+  .logo{
+      width: 80px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+  
+  }
+  .coupon-card h3{
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 35px;
+  
+  }
+  .coupon-card p{
+      font-size: 15px;
+  
+  }
+  .coupon-row{
+      display: flex;
+      align-items: center;
+      margin: 10px auto;
+      width: fit-content;
+  
+  }
+  #cpnCode{
+      border: 1px dashed #fff;
+      padding: 10px 20px;
+      border-right: 0;
+  
+  }
+  #cpnBtn{
+      border: 1px solid #fff;
+      background: #fff;
+      padding: 10px 20px;
+      color: #7158fe;
+      cursor: pointer;
+  }
+  .circle1, .circle2{
+      background: #f0fff3;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+  
+  }
+  .circle1{
+      left: -25px;
+  }
+  .circle2{
+      right: -25px;
+  }
+  
+  
   .address-card {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -90,22 +176,30 @@
         </div>
       </div>
     </div>
+    
     <section class="ftco-section">
       <div class="container">
+        
+
         <div class="row md -8justify-content-center">
           <div class="col-xl-7">
             <form action="#" class="billing-form">
               <h3 class="mb-4 billing-heading">Billing Details</h3>
 
               {% for i in address %}
+              
               <div
                 class="card ml-3 address-card"
                 style="width: 30rem;{% if forloop.first %} display: block;{% else %} display: none;{% endif %}"
               >
+              
+              
                 <div class="card-body">
                   <h5 class="card-title">Address {{ forloop.counter }}</h5>
                   <div class="address-details">
                     <div class="row">
+                      
+
                       <div class="col fullname">First Name: {{ i.fullname }}</div>
                     </div>
 
@@ -128,11 +222,20 @@
                     <div class="row">
                       <div class="col zip">ZIP: {{ i.zip }}</div>
                     </div>
-                  </div>
+                    <button type="button" class="btn btn-primary btn-sm " style ="margin-left:300px;"data-toggle="modal" data-target="#Modal2{{ forloop.counter0 }}">
+                      Edit Address
+                    </button>
+                    <div>
+                      <a class="deleteAddress" href="{% url 'deleteAddress_checkout' i.id %}">
+                      <i class="fas fa-trash-alt" style="color: black ;"></i>	
+                       </a> 
+                      </div>
+                   </div>
                 </div>
               </div>
+             
               {% endfor %}
-
+            
               <div class="form-group">
                 <div class="col-md-4">
                   <label for="address-toggle">Select Address</label>
@@ -188,6 +291,31 @@
               </div>
             </form>
             <!-- END -->
+            <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> Coupon Code Web Design</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container1">
+            <div class="coupon-card">
+                <img src="https://www.brandbucket.com/sites/default/files/logo_uploads/302425/stamped_preview_w7.png" class="logo">
+                <h3>10% flat off on <br>Purchase min amount of 500</h3>
+                <di class="coupon-row">
+                    <span id="cpnCode">fooddesk16</span>
+                    <span id="cpnBtn">Copy Code</span>
+                </di>
+                <p>Valid Till: 20Dec, 2023</p>
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+            </div>
+        </div>
+    </body>
+</html>
           </div>
 
           <div class="col-lg-5 cart-wrap">
@@ -224,11 +352,11 @@
                 <h3 class="billing-heading mb-4">Cart Total</h3>
                 <p class="d-flex">
                   <span>Subtotal</span>
-                  <span id="sub_total">{{subtotal1}}</span>
+                  <span id="sub_total">₹{{subtotal1}}</span>
                 </p>
                 <p class="d-flex">
                   <span>Tax</span>
-                  <span id="tax_field">{{tax1}}</span>
+                  <span id="tax_field">₹{{tax1}}</span>
                 </p>
 
                 <hr />
@@ -249,7 +377,7 @@
                   ></span
                 >
                 {% else %}
-                <span id="grand_total">{{totalamount1}}</span>
+                <span id="grand_total">₹{{totalamount1}}</span>
                 {% endif %}
               </div>
             </div>
@@ -324,6 +452,59 @@
 
 
       {%endif%}
+
+      {% for address in address%}
+
+          <!-- edit prfile the modal HTML code -->
+      <div class="modal" tabindex="-1" id="Modal2{{forloop.counter0}}">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">EDIT ADDRESS</h5>
+              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form  action="{%url 'update_address_checkout' address.id%}" method="POST">
+                {% csrf_token %}
+                <div class="mb-1">
+                  <label for="fullname" class="form-label">Fullname</label>
+                  <input type="text" class="form-control" id="fullname" name="fullname" value="{{address.fullname}}">
+                </div>
+                <div class="mb-1">
+                  <label for="mobile" class="form-label">Mobile</label>
+                  <input type="text" class="form-control" id="mobile" name="mobile"value="{{address.mobile}}">
+                </div>
+                <div class="mb-1">
+                  <label for="house1" class="form-label">House</label>
+                  <input type="text" class="form-control" id="house1" name="house1" value="{{address.house}}">
+                </div>
+                <div class="mb-1">
+                  <label for="city1" class="form-label">City</label>
+                  <input type="text" class="form-control" id="city1" name="city1" value="{{address.city}}">
+                </div>
+                <div class="mb-1">
+                  <label for="state1" class="form-label">State</label>
+                  <input type="text" class="form-control" id="state1" name="state1" value="{{address.state}}">
+                </div>
+                <div class="mb-1">
+                  <label for="zip1" class="form-label">ZIP</label>
+                  <input type="text" class="form-control" id="zip1" name="zip1" value="{{address.zip}}">
+                </div>
+                <div class="mb-1">
+                  <label for="country1" class="form-label">Country</label>
+                  <input type="text" class="form-control" id="country1" name="country1" value="{{address.country}}">
+                </div>
+                <!-- Add more fields or customize the form as needed -->
+            </div>
+            <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="saveChangesButton">Save changes</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div> 
+      
+      {%endfor%}
 
       <!-- add address checkoutpage the modal HTML code -->
       <div class="modal" tabindex="-1" id="myModal{{forloop.counter}}">
@@ -463,6 +644,9 @@
           csrfmiddlewaretoken: "{{csrf_token}}",
         },
         success: function (response) {
+          setTimeout(function() {
+            location.reload();
+          }, 5000); //
           console.log(response);
 
           if (
@@ -595,6 +779,19 @@
     });
 
   });
-</script>
+</script> 
+<script>
+  var cpnBtn = document.getElementById("cpnBtn");
+  var cpnCode = document.getElementById("cpnCode");
 
-{% endblock %}
+  cpnBtn.onclick = function(){
+      navigator.clipboard.writeText(cpnCode.innerHTML);
+      cpnBtn.innerHTML ="COPIED";
+      setTimeout(function(){
+          cpnBtn.innerHTML="COPY CODE";
+      }, 3000);
+  }
+</script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ {% endblock %}

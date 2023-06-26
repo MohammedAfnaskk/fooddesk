@@ -34,5 +34,7 @@ class Product(models.Model):
     product_price =models.IntegerField(blank=False,null=True)
     offer = models.ForeignKey(Offer, on_delete=models.SET_NULL, null=True )
 
-    
+# class Product_Variant(models.Model):
+#     product_variant =models.ForeignKey(Product,on_delete=models.CASCADE)
+#     size =    
     

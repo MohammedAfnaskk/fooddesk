@@ -42,25 +42,34 @@
               <div>
 
                 <div class="container">
-                  <form method="post">
-                    {% csrf_token %}
-                    <div class="row justify-content-center"style="
-                    margin-top: 50px;">
-                      <div class="col-md-4">
-                        <label for="start-date">Start Date</label>
-                        <input type="date" id="start-date" name="start-date" class="form-control"  value="{{s_date}}" >
+                  <form action="{% url 'salesreport' %}" method="post">
+                      {% csrf_token %}
+                      <div class="row justify-content-center" style="margin-top: 50px;">
+                          <div class="col-md-4">
+                              <label for="start-date">Start Date</label>
+                              <input type="date" id="start-date" name="start-date" class="form-control" value="{{ s_date }}">
+                          </div>
+                          <div class="col-md-4">
+                              <label for="end-date">End Date</label>
+                              <input type="date" id="end-date" name="end-date" class="form-control" value="{{ e_date }}">
+                          </div>
+                          <div class="col-md-12 d-flex justify-content-center p-3">
+                              <button class="btn btn tracking-button btn-block" type="submit">Generate Report</button>
+                          </div>
                       </div>
-                      <div class="col-md-4">
-                        <label for="end-date">End Date</label>
-                        <input type="date" id="end-date" name="end-date" class="form-control" value="{{e_date}}">
-                      </div>
-                      <div class="col-md-12 d-flex justify-content-center p-3">
-                        <button class="btn btn tracking-button btn-block" type="submit">Generate Report</button>
-                      </div>
-                    </div>
+                      {% comment %} <a href="?download=1" class="btn btn-primary btn-sm mb-2">Download(excel)</a> {% endcomment %}
                   </form>
-                </div>
-
+                  {% if sales %}
+                  <form action="{% url 'salesreport' %}?download=1" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="start-date" value="{{ s_date }}">
+                      <input type="hidden" name="end-date" value="{{ e_date }}">
+                      <button type="submit" class="btn btn-secondary btn-sm mb-2">Download (PDF)</button>
+                  </form>
+                  
+                  {%endif%}
+              </div>
+               
                 <section class="section">
                     <div class="row">
                       <div class="col-lg-6" style="width:100%;">

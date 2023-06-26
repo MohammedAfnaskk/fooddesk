@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.views.decorators.cache import cache_control
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+
 
 #validation
 
@@ -35,7 +37,7 @@ def login(request):
         else:
             messages.error(request,"Your username or password is Incorrect")
             return redirect("login")
-    return render(request,"login.html") 
+    return render(request,"Account/login.html") 
 
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
@@ -55,7 +57,7 @@ def signup(request):
                 return redirect('home')
             else:
                 messages.error(request,'you enterd wrong otp try again')
-                return render(request,'signup.html',{'otp':True,'usr':usr}) 
+                return render(request,'Account/signup.html',{'otp':True,'usr':usr}) 
     
         else:    
             name =request.POST['first_name']
@@ -96,8 +98,8 @@ def signup(request):
                         fail_silently=False
                     )
                 messages.error(request,"Please enter OTP and Finish the registration..!!")
-                return render(request,'signup.html',{'otp':True,'usr':user})
-    return render(request,"signup.html")
+                return render(request,'Account/signup.html',{'otp':True,'usr':user})
+    return render(request,"Account/signup.html")
 
 @login_required(login_url='login')
 def logout(request):
@@ -111,28 +113,19 @@ def logout(request):
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
  
 def signin(request):
-    # if request.user.is_superuser:
-    #     if request.user.is_authenticated:
-    #         return redirect('dashboard')
-    #     else:
-    #         return redirect(signin)
-    # else:
-    #     return redirect('home')
-       
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password,is_superuser=True)
         
         if user is not None:
-            
-            if request.user.is_superuser:
-                auth.login(request, user)
-                return redirect('dashboard')
-            else:
-                messages.error(request, "Your username or password is incorrect")
-                return redirect('signin')
+            print("hello")
+            auth.login(request, user)
+            return redirect('dashboard')
+        else:
+            messages.error(request, "You are not a superuser")
+            return redirect('signin')
     return render(request, "Admin/signin.html")
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
@@ -165,8 +158,96 @@ def signupadmin(request):
         return redirect('signin')
     return render(request, "Admin/signupadmin.html")
 
-                              
 
+ 
+    
+def forgot_password(request):
+
+    if request.method=='POST':
+        get_otp=request.POST.get('otp')
+        if get_otp:
+            get_email=request.POST.get('email')
+            usr=User.objects.get(email=get_email)
+            if int(get_otp)==UserOTP.objects.filter(user=usr).last().otp:
+                user = User.objects.get(email = get_email)
+                password1 = request.POST.get('password1')
+                password2 = request.POST.get('password2')
+                Pass = ValidatePassword(password1)
+                if password1 == password2:
+                    if Pass is False:
+                        context ={
+                                'pre_otp':get_otp,
+                            }
+                        messages.info(request,'Enter Strong Password')
+                        return render(request,'Account/forgotpassword.html',context)
+                    user.set_password(password1)
+                    user.save()
+                    UserOTP.objects.filter(user=usr).delete()
+                    return redirect('login')
+                else:
+                    messages.error(request,"Password dosn't match")
+            else:
+                messages.warning(request,f'You Entered a wrong OTP')
+                return render(request,'Account/forgotpassword.html',{'otp':True,'usr':usr})
+            
+        # User rigistration validation
+        else:
+            email = request.POST['email']
+            # null values checking
+            check = [email]
+            for values in check:
+                if values == '':
+                    context ={
+                       'pre_email':email,
+                    }
+                    return render(request,'Account/forgotpassword.html',context)
+                else:
+                    pass
+
+            result = validateEmail(email)
+            if result is False:
+                context ={
+                        'pre_email':email,
+                    }
+                messages.info(request,'Enter valid email')
+                return render(request,'Account/forgotpassword.html',context)
+            else:
+                pass
+            
+            if User.objects.filter(email = email).exists():
+                usr = User.objects.get(email=email) 
+                user_otp=random.randint(100000,999999)
+                UserOTP.objects.create(user=usr,otp=user_otp)
+                mess=f'Hello\t{usr.username},\nYour OTP to verify your account for FOODDESK is {user_otp}\nThanks!'
+                send_mail(
+                        "welcome to FOODDESK Verify your Email",
+                        mess,
+                        settings.EMAIL_HOST_USER,
+                        [usr.email],
+                        fail_silently=False
+                    )
+                return render(request,'Account/forgotpassword.html',{'otp':True,'usr':usr})
+            else:
+                messages.info(request,'You have not an account')
+                return render (request, 'Account/forgotpassword.html')
+    return render(request,'Account/forgotpassword.html')
+
+def ValidatePassword(password):
+    from django.contrib.auth.password_validation import validate_password
+    try:
+        validate_password(password)
+        return True
+    except ValidationError:
+        return False
+ 
+def validateEmail(email):
+    from django.core.validators import validate_email
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+   
      
           
             

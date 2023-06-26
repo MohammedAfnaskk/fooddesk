@@ -15,6 +15,14 @@ from datetime import datetime,timedelta
 from django.db.models.functions import TruncDay
 from django.db.models import DateField
 from django.db.models.functions import Cast
+import datetime
+from reportlab.pdfgen import canvas
+from io import BytesIO
+import pandas as pd
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+import csv
+
 
 
 
@@ -26,12 +34,12 @@ def dashboard(request):
     if not request.user.is_superuser:
         return redirect('signin')
 
-    delivered_items = OrderItem.objects.filter(status='Delivered')
+    delivered_items = OrderItem.objects.filter(status='Order Confirmed')
 
     revenue = 0
     for item in delivered_items:
         revenue += item.order.total_price
-
+    print(revenue)
     top_selling = OrderItem.objects.annotate(total_quantity=Sum('quantity')).order_by('-total_quantity').distinct()[:5]
 
     recent_sale = OrderItem.objects.all().order_by('-id')[:5]
@@ -278,7 +286,6 @@ def deletecategory(request,deletecategory_id):
     return redirect('category')
 
 # Sales reprt
-from datetime import datetime
 def salesreport(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -300,16 +307,108 @@ def salesreport(request):
             else:
                 messages.error(request, 'No data found')
             return redirect(salesreport)
-
         order_items = OrderItem.objects.filter(order__created_at__date__gte=start_date, order__created_at__date__lte=end_date)
+        
+        if order_items:
+            context.update(sales=order_items, s_date=start_date, e_date=end_date)
+        else:
+            messages.error(request, 'No data found')
+    else:    
+         # Get the current month and year
+        current_date = datetime.date.today()
+        current_month = current_date.month
+        current_year = current_date.year   
+     
+          # Get the start and end dates of the current month
+        start_date = f'{current_year}-{current_month:02d}-01'
+        end_date = current_date.strftime('%Y-%m-%d')
+
+        
+            # Query the sales data for the current month
+        order_items = OrderItem.objects.filter(order__created_at__date__gte=start_date, order__created_at__date__lte=end_date)
+        
+
 
         if order_items:
             context.update(sales=order_items, s_date=start_date, e_date=end_date)
         else:
             messages.error(request, 'No data found')
+            
+ 
+            
+            
+            
+            
+            
+            
+    
+   
+    # Check if the user requested a download
+    if request.GET.get('download') == '1':
+        # Generate the sales report data
+        start_date = request.POST.get('start-date')
+        end_date = request.POST.get('end-date')
+        order_items = OrderItem.objects.filter(order__created_at__date__gte=start_date, order__created_at__date__lte=end_date)
+
+        # Create a list to store the table data
+        table_data = [['ID', 'Date', 'Customer', 'Product Name', 'Quantity', 'Price']]
+   
+        # Populate the table data with the relevant sales data
+        for item in order_items:
+           table_data.append([item.order.id, item.order.created_at.date(), item.order.address.customer, item.product.product_name, item.quantity, item.order.total_price])
+
+        # Create a PDF document
+        buffer = BytesIO()
+        doc = SimpleDocTemplate(buffer)
+        elements = []
+
+        # Create the table and set its style
+        table = Table(table_data)
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 12),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ]))
+
+        # Add the table to the PDF document
+        elements.append(table)
+
+        # Build the PDF document
+        doc.build(elements)
+
+        # Set the appropriate response headers for downloading the PDF
+        buffer.seek(0)
+        response = HttpResponse(buffer, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="sales_report.pdf"'
+        return response
+    
+    #    # excel download
+    # if 'download' in request.GET:
+    #     sales = context.get('sales')
+    #     response = HttpResponse(content_type='text/csv')
+    #     response['Content-Disposition'] = 'attachment; filename="sales_report.csv"'
+
+    #     writer = csv.writer(response)
+    #     writer.writerow(['Order ID', 'Customer', 'Quantity', 'product', 'Price'])
+
+    #     for sale in sales :
+    #         writer.writerow([
+    #             sale.order.id,
+    #             sale.order.address.customer,
+    #             sale.quantity,
+    #             sale.product.product_name,
+    #             sale.order.total_price
+    #         ])
+    #     return response
+
     return render(request, 'admin/salesreport.html', context)
 
-import csv
+
 
 
  

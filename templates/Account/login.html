@@ -1,4 +1,5 @@
-{%load static%}
+ {%load static%}
+
   <!doctype html>
 <html lang="en">
   <head>
@@ -58,7 +59,7 @@
                   <input type="checkbox" checked="checked"/>
                   <div class="control__indicator"></div>
                 </label>
-                <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
+                <span class="ml-auto"><a href="{%url 'forgotpassword'%}" class="forgot-pass">Forgot Password</a></span> 
               </div>
 
               <input type="submit" value="Log In" class="btn btn-block btn-primary">
@@ -84,3 +85,4 @@
     <script src="{%static 'logincss/js/main.js'%}"></script>
   </body>
 </html>
+ 

@@ -160,3 +160,38 @@ def update_address_checkout(request,adrs_id):
     address.save()
     return redirect('checkout')
   
+  
+
+def update_address_checkout(request,adrs_id):
+  address = Address.objects.get(id = adrs_id)
+
+  if request.method == 'POST':
+    new_name =request.POST.get('fullname')
+    new_mobile =request.POST.get('mobile')
+    new_house = request.POST.get('house1')
+    new_city = request.POST.get('city1')
+    new_state = request.POST.get('state1')
+    new_zip = request.POST.get('zip1')
+    new_country = request.POST.get('country1')
+    if new_name:
+      address.fullname = new_name
+    if new_mobile:
+      address.mobile = new_mobile
+    if new_house:
+      address.house=  new_house
+    if new_city:
+      address.city = new_city
+    if new_state:
+      address.state = new_state
+    if new_zip:
+      address.zip = new_zip
+    if new_country:
+      address.country = new_country
+    address.save()
+    return redirect('checkout')
+  
+def delete_address_checkout(request, address_id):
+    address = Address.objects.get(id=address_id)
+    address.delete()
+    messages.success(request, 'Address deleted successfully.')
+    return redirect('checkout')  

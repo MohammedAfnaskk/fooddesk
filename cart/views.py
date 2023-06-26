@@ -32,7 +32,7 @@ def cart(request):
 
 
 def addtocart(request):
-    if request.method        == 'POST':
+    if request.method  == 'POST':
         if request.user.is_authenticated:
             prod_id          = int(request.POST.get('product_id'))
             product_check    = Product.objects.get(id=prod_id)

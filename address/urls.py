@@ -8,7 +8,8 @@ urlpatterns = [
     path('deleteAddress/<int:address_id>',views.delete_address,name='deleteAddress'),
     path('change_password/',views.change_password,name='change_password'),
     path('add_address_checkout/',views.add_address_checkout,name='add_address_checkout'),
-    path('update_address_checkout/<int:adrs_id>',views.update_address_checkout,name="update_address_checkout")
+    path('update_address_checkout/<int:adrs_id>',views.update_address_checkout,name="update_address_checkout"),
+    path('deleteAddress_checkout/<int:address_id>',views.delete_address_checkout,name='deleteAddress_checkout'),
 
     
     

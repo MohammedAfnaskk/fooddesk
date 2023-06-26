@@ -8,4 +8,6 @@ class Wishlist(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='whishlist')
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+
  
