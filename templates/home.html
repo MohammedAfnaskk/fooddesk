@@ -51,7 +51,8 @@
      <section class="ftco-section">
 			<div class="container">
 				<div class="row no-gutters ftco-services">
-          <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+          <div class="col-md-3 text-center d-flex align-self-stretch 
+          ">
             <div class="media block-6 services mb-md-0 mb-4">
               <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
             		<span class="flaticon-shipped"></span>
@@ -62,7 +63,8 @@
               </div>
             </div>      
           </div>
-          <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+          <div class="col-md-3 text-center d-flex align-self-stretch 
+          ">
             <div class="media block-6 services mb-md-0 mb-4">
               <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
             		<span class="flaticon-diet"></span>
@@ -74,7 +76,8 @@
             </div>    
           </div>
           
-          <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+          <div class="col-md-3 text-center d-flex align-self-stretch 
+          ">
             <div class="media block-6 services mb-md-0 mb-4">
               <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
             		<span class="flaticon-award"></span>
@@ -85,7 +88,8 @@
               </div>
             </div>      
           </div>
-          <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+          <div class="col-md-3 text-center d-flex align-self-stretch 
+          ">
             <div class="media block-6 services mb-md-0 mb-4">
               <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
             		<span class="flaticon-customer-service"></span>
@@ -106,7 +110,8 @@
 					<div class="col-md-8">
 						<div class="row">
 							<div class="col-md-6 order-md-last align-items-stretch d-flex">
-								<div class="category-wrap-2 ftco-animate img align-self-stretch d-flex" style="background-image: url({%static 'foodiecss/images/bros_1.jpg)'%}">
+								<div class="category-wrap-2 
+                 img align-self-stretch d-flex" style="background-image: url({%static 'foodiecss/images/bros_1.jpg)'%}">
 									<div class="text text-center">
 										<h2>Broasted chicken</h2>
 										<p>Protect the health of every home</p>
@@ -115,12 +120,14 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/bu_1.jpg)'%}">
+								<div class="category-wrap 
+                 img mb-4 d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/bu_1.jpg)'%}">
 									<div class="text px-3 py-1">
 										<h2 class="mb-0"><a href="#">Burger</a></h2>
 									</div>
 								</div>
-								<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/piz_1.jpg)'%}">
+								<div class="category-wrap 
+                 img d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/piz_1.jpg)'%}">
 									<div class="text px-3 py-1">
 										<h2 class="mb-0"><a href="#">Pizza</a></h2>
 									</div>
@@ -130,12 +137,14 @@
 					</div>
 
 					<div class="col-md-4">
-						<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/ju_1.jpg)'%}">
+						<div class="category-wrap 
+             img mb-4 d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/ju_1.jpg)'%}">
 							<div class="text px-3 py-1">
 								<h2 class="mb-0"><a href="#">Juices & drinks</a></h2>
 							</div>		
 						</div>
-						<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/bros_1.jpg)'%}">
+						<div class="category-wrap 
+             img d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/bros_1.jpg)'%}">
 							<div class="text px-3 py-1">
 								<h2 class="mb-0"><a href="#">Broasted </a></h2>
 							</div>
@@ -148,7 +157,8 @@
     <section class="ftco-section">
     	<div class="container">
 			<div class="row justify-content-center mb-3 pb-3">
-          <div class="col-md-12 heading-section text-center ftco-animate">
+          <div class="col-md-12 heading-section text-center 
+          ">
           	<span class="subheading">Featured Products</span>
             <h2 class="mb-4">Our Products</h2>
             <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
@@ -159,17 +169,18 @@
 			
     		<div class="row">
 				{% for i in prod %}
-    			<div class="col-md-6 col-lg-3 ftco-animate">
+    			<div class="col-md-6 col-lg-3 
+          ">
     				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="{{i.image.url}}"  alt="Colorlib Template">
+    					<a href="#" class="img-prod"><img class="img-fluid" src="{{i.image_variant.url}}"  alt="Colorlib Template">
      						<div class="overlay"></div>
     					</a>
     					<div class="text py-3 pb-4 px-3 text-center">
-    						<h3><a href="#">{{i.product_name}}</a></h3>
+    						<h3><a href="#">{{i.product_variant}}</a></h3>
     						<div class="d-flex">
     							<div class="pricing">
 		    						<p class="price"><span class="mr-2 price-dc"></span><span class="price-sale">₹
-										{{i.product_price}}</span></p>
+										{{i.price_variant}}</span></p>
 		    					</div>
 	    					</div>
 	    					<div class="bottom-area d-flex px-3">
@@ -201,13 +212,15 @@
     <section class="ftco-section testimony-section">
       <div class="container">
         <div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate text-center">
+          <div class="col-md-7 heading-section 
+           text-center">
           	<span class="subheading">Testimony</span>
             <h2 class="mb-4">Our satisfied customer says</h2>
             <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
           </div>
         </div>
-        <div class="row ftco-animate">
+        <div class="row 
+        ">
           <div class="col-md-12">
             <div class="carousel-testimony owl-carousel">
               <div class="item">

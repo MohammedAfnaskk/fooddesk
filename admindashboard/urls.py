@@ -17,6 +17,17 @@ urlpatterns = [
     path('editcategory/<int:editcategory_id>/', views.editcategory, name='editcategory'),
     path('deletecategory/<int:deletecategory_id>',views.deletecategory,name='deletecategory'),
     path('salesreport/',views.salesreport, name="salesreport"),
+    path('addproduct_variant/',views.addproduct_variant,name="addproduct_variant"),
+    path('edit_variation/<int:variation_id>/', views.edit_variation, name='edit_variation'),
+    path('Product_Variant_list/', views.Product_Variant_list, name='Product_Variant_list'),
+    path('delete_variation/<int:variation_id>/', views.delete_variation, name='delete_variation'),
+    path('addoffer/',views.addoffer, name="addoffer"),
+    path('Adminoffer/',views.adminoffer, name="adminoffer"),
+    path('editoffer/<int:offer_id>/',views.editoffer, name="editoffer"),
+    path('deleteoffer/<int:delete_id>/',views.deleteoffer, name="deleteoffer")
+
+
+
 
 
     

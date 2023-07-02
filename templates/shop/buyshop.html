@@ -1,63 +1,76 @@
- {% extends 'base.html' %}
- {%load static%}
-{%block content%}
-			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"/>
-			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"/>
-				<div class="hero-wrap hero-bread" style="background-image: url('{%static 'foodiecss/images/add_1.jpg'%}');">
-				<div class="container">
-					<div class="row no-gutters slider-text align-items-center justify-content-center">
-					<div class="col-md-9 ftco-animate text-center">
-						<p class="breadcrumbs"><span class="mr-2"><a href="index.html"></a></span> <span class="mr-2"><a href="index.html">Product</a></span> <span></span></p>
-						<h1 class="mb-0 bread">Burger</h1>
-					</div>
-					</div>
-				</div>
-				</div>
-				
-			<section class="ftco-section">
-				<div class="container product_data">
-					<div class="row">
-						<div class="col-lg-6 mb-5 ftco-animate">
-							<a href="images/product-1.jpg" class="image-popup"><img src="{{oneproduct.image.url}}" class="img-fluid" alt="Colorlib Template"></a>
-						</div>
-						<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-							<h3>{{oneproduct.product_name}}</h3>
-							<div class="rating d-flex">
-								<p class="text-left mr-4">
-									<a href="#" class="mr-2">5.0</a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-								</p>
-								<p class="text-left mr-4">
-									<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
-								</p>
-								<p class="text-left">
-									<a href="#" class="mr-2" style="color: #000;">50 <span style="color: #bbb;">Sold</span></a>
-								</p>
-							</div>
-							<p class="price"><span>₹{{oneproduct.product_price}}</span></p>
-							<p>{{oneproduct.product_description}}</p>
-							<div class="row mt-4">
-								<div class="col-md-6">
-									<div class="form-group d-flex">
-										<div class="select-wrap">
-											<div class="icon"><span class="ion-ios-arrow-down"></span></div>
-											<select name="" id="" class="form-control">
-												<option value="">Small</option>
-												<option value="">Medium</option>
-												<option value="">Large</option>
-												<option value="">Extra Large</option>
-											</select>
-										</div>
-									</div>
-								</div>
-				<div class="w-100"></div>
-			<div class="input-group col-md-6 d-flex mb-3">
-				{% csrf_token %}
-				<input type='hidden' value="{{oneproduct.id}}" class="prod_id">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
+
+<div class="hero-wrap hero-bread" style="background-image: url('{% static 'foodiecss/images/add_1.jpg' %}');">
+  <div class="container">
+    <div class="row no-gutters slider-text align-items-center justify-content-center">
+      <div class="col-md-9 text-center">
+        <p class="breadcrumbs"><span class="mr-2"><a href="index.html"></a></span> <span class="mr-2"><a href="index.html">Product</a></span> <span></span></p>
+        <h1 class="mb-0 bread">Burger</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="ftco-section">
+  <div class="container product_data">
+    <div class="row">
+      <div class="col-lg-6 mb-5">
+        <a href="images/product-1.jpg" class="image-popup"><img id="imagechange" src="{{ variations.image_variant.url }}" class="img-fluid" alt="Colorlib Template"></a>
+      </div>
+      <div class="col-lg-6 product-details pl-md-5">
+        <h3>{{ variations.product_variant }}</h3>
+
+        <div class="rating d-flex">
+          <p class="text-left mr-4">
+            <a href="#" class="mr-2">5.0</a>
+            <a href="#"><span class="ion-ios-star-outline"></span></a>
+            <a href="#"><span class="ion-ios-star-outline"></span></a>
+            <a href="#"><span class="ion-ios-star-outline"></span></a>
+            <a href="#"><span class="ion-ios-star-outline"></span></a>
+            <a href="#"><span class="ion-ios-star-outline"></span></a>
+          </p>
+          <p class="text-left mr-4">
+            <a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
+          </p>
+          <p class="text-left">
+            <a href="#" class="mr-2" style="color: #000;">50 <span style="color: #bbb;">Sold</span></a>
+          </p>
+        </div>
+        <p class="price"><span id="pricechange">₹{% if variations.offer %}
+			<del class="text-danger">{{variations.price_variant}}</del>&nbsp;
+			{{variations.get_offer}}
+			{% else %}
+		    {{variations.price_variant}}
+			{% endif %}</span></p>
+        <p>{{ variations.product_variant.product_description }}</p>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="form-group d-flex">
+              <div class="select-wrap">
+                <div class="icon"><span class="ion-ios-arrow-down "></span></div>
+                <select  id="sizeSelect" class="form-control ChangeSize ">
+                  {% for size in sizes %}
+				  {% if variations.size.id == size.id %}
+				  <option selected value="{{ size.id }}">{{ size.size }}</option>
+				  {% else %}
+                  <option value="{{ size.id }}">{{ size.size }}</option>
+				  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+		  <input type="hidden" value="{{variations.id}}" class="var_id" >
+		  <input type="hidden" value="{{variations.product_variant.id}}" class="prod_id" >
+          <div class="w-100"></div>
+          <div class="input-group col-md-6 d-flex mb-3">
+            {% csrf_token %}
+ 				
 				<span class="input-group-btn mr-2">
 					<button type="button" class="quantity-left-minus btn" data-type="minus" data-field="quantity">
 						<i class="ion-ios-remove"></i>
@@ -85,11 +98,12 @@
 						
 					</div>
 				</section>
+ 
 
 				<section class="ftco-section">
 					<div class="container">
 							<div class="row justify-content-center mb-3 pb-3">
-					<div class="col-md-12 heading-section text-center ftco-animate">
+					<div class="col-md-12 heading-section text-center ">
 						<span class="subheading">Products</span>
 						<h2 class="mb-4">Related Products</h2>
 						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
@@ -98,7 +112,7 @@
 					</div>
 					<div class="container">
 						<div class="row">
-							<div class="col-md-6 col-lg-3 ftco-animate">
+							<div class="col-md-6 col-lg-3 ">
 								<div class="product">
 									<a href="#" class="img-prod"><img class="img-fluid" src="{%static 'foodiecss/images/bu_2.jpg'%}" alt="Colorlib Template">
 										<span class="status">30%</span>
@@ -127,7 +141,7 @@
 									</div>
 								</div>
 							</div>
-    			<div class="col-md-6 col-lg-3 ftco-animate">
+    			<div class="col-md-6 col-lg-3 ">
     				<div class="product">
     					<a href="#" class="img-prod"><img class="img-fluid" src="{%static 'foodiecss/images/add_2.jpg'%}" alt="Colorlib Template">
     						<div class="overlay"></div>
@@ -155,7 +169,7 @@
     					</div>
     				</div>
     			</div>
-    			<div class="col-md-6 col-lg-3 ftco-animate">
+    			<div class="col-md-6 col-lg-3 ">
     				<div class="product">
     					<a href="#" class="img-prod"><img class="img-fluid" src="{%static 'foodiecss/images/bu_1.jpg'%}" alt="Colorlib Template">
 	    					<div class="overlay"></div>
@@ -183,7 +197,7 @@
     					</div>
     				</div>
     			</div>
-    			<div class="col-md-6 col-lg-3 ftco-animate">
+    			<div class="col-md-6 col-lg-3 ">
     				<div class="product">
     					<a href="#" class="img-prod"><img class="img-fluid" src="{%static 'foodiecss/images/bu_2.jpg'%}" alt="Colorlib Template">
     						<div class="overlay"></div>
@@ -270,6 +284,76 @@
 					quantityField.val(currentQuantity - 1);
 				}
 			});
-			</script>
-			
-			{% endblock content %}
+</script>
+<script>
+$('.ChangeSize').change(function (e) {
+	e.preventDefault();
+  
+	var size_id = $(this).val();  // Get the selected value from the dropdown
+	var prod_id = $(this).closest('.product_data').find('.prod_id').val();
+	var var_id = $(this).closest('.product_data').find('.var_id').val();
+	var token = $('input[name=csrfmiddlewaretoken]').val();
+	console.log(size_id,prod_id,var_id)
+	$.ajax({
+	  method: "POST",
+	  url: "/singleproduct/"+var_id,
+	  data: {
+		'size_id': size_id,
+		'prod_id' : prod_id,
+		'csrfmiddlewaretoken': token
+	  },
+	  success: function(response) {
+			  console.log(response);
+			  {% comment %} alertify.success(response.status); {% endcomment %}
+			  var variant_id = response.variation_id
+			  var variationQuantity = response.variation_quantity; 
+			  var var_d = document.getElementsByClassName('var_id')[0].value = variant_id
+			  
+  
+			  imageElement = document.getElementById('imagechange')
+			  priceElement = document.getElementById('pricechange')  
+			  
+  
+			  {% for variant in variation_list %}
+  
+				if({{variant.id}} == variant_id){
+				  imageElement.src = '{{variant.image_variant.url}}'
+ 				  var formattedPrice = '₹' + parseFloat('{{variant.price_variant}}').toFixed(2);
+				  priceElement.textContent = formattedPrice;
+				
+				$('.cartdatas').load(location.href + " .cartdatas");
+  
+				}
+			  {% endfor %}
+				 
+		  }
+	});
+  });
+  
+  $(document).ready(function() {
+	$(".addToCartBtn").click(function(event) {
+	  event.preventDefault();
+  
+	  var product_id = $(this).closest('.product_data').find('.prod_id').val();
+	  var variation_id = $(this).closest('.product_data').find('.var_id').val();
+	  var product_qty = $(this).closest('.product_data').find('.qty-input').val(); ;
+	  var token = $('input[name=csrfmiddlewaretoken]').val();
+	  $.ajax({
+		url: '/cart/addtocart/',
+		method: 'POST',
+		data: {
+		  'variation_id' : variation_id,
+		  'product_id': product_id,
+		  'product_qty': product_qty,
+		  'csrfmiddlewaretoken': token
+		},
+		success: function(response) {
+		  // Handle the successful response here
+		  console.log(response);
+		  alertify.success(response.status);
+		},
+	  });
+	});
+  }); 
+</script>
+{% endblock content %}

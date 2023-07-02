@@ -42,10 +42,13 @@
                 <tr>
                   <th scope="row">{{ item.order.id }}</th>
                   <td>{{ item.order.user.last_name }}</td>
-                  <td class="img" style="background-image: url('{{ item.product.image.url }}');"></td>
-                  <td>{{ item.product.product_name }}</td>
-                  <td>{{ item.product.product_price }}</td>
-                  <td>{{ item.quantity }}</td>
+                  <td class="img" style="background-image: url('{{ item.variation.image_variant.url }}');"></td>
+                  <td>{{ item.variation.product_variant }}</td>
+                  <td>{% if item.variation.offer %}
+                     ₹{{item.variation.get_offer}}
+                    {% else %}
+                    ₹{{item.variation.price_variant}}
+                    {% endif %}</td>                  <td>{{ item.quantity }}</td>
                   <td>{{ item.order.total_price }}</td>
                   <td>{{ item.order.tracking_no }}</td>
                   <td>{{ item.order.payment_mode }}</td>

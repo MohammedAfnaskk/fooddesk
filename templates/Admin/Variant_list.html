@@ -1,0 +1,95 @@
+{% extends 'Admin/adminbase.html' %}
+{%load static%}
+{%block admin%}
+ 
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Product Variant list</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Add Product_Variant</a></li>
+        <li class="breadcrumb-item active">Product Variant list</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+ 
+            <!-- Table with stripped rows -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">id</th>
+                 <th scope="col">image</th>
+                  <th scope="col">Product Variant</th>
+                  <th scope="col">Size</th>
+                   <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in var %}
+                <tr>
+                  <th scope="row">{{ item.id }}</th>
+                  <td class="img" style="background-image: url('{{ item.image_variant.url }}');"></td>
+                  <td>{{ item.product_variant}}</td>
+                  <td>{{ item.size}}</td>
+                  <td>{{ item.price_variant }}</td>
+                  <td>{{ item.quantity_variant }}</td>
+                  <td>
+                    <a href="{% url 'edit_variation' item.id %}" class="btn btn-outline-primary btn-sm">Edit</a>
+                    <a href="{% url 'delete_variation' item.id %}" type="submit" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+                </tr>
+                {% endfor %}
+            
+              </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main><!-- End #main -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+
+
+
+ 
+<style>
+  .img {
+    width: 100px;
+    height: 80px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .btn-outline-primary {
+    color:#ff8511;
+    border-color: #ff8511;
+    
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #ff8511;
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  
+</style>
+
+{%endblock admin%}

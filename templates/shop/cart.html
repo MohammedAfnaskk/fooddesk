@@ -87,7 +87,8 @@
               </tr>
             </thead>
             <tbody>
-              {% if cart %} {% for item in cart %}
+              {% if cart %} 
+              {% for item in cart %}
               <tr class="text-center product_data">
                 <td>
                   <form
@@ -103,7 +104,7 @@
 
                 <td
                   class="img"
-                  style="background-image: url('{{ item.product.image.url }}'); width: 180px; height: 80px;"
+                  style="background-image: url('{{ item.variation.image_variant.url }}'); width: 180px; height: 80px;"
                 ></td>
                 <td class="product-name">
                   <h3>{{ item.product.product_name }}</h3>
@@ -112,10 +113,10 @@
                 <td class="price">{{ item.product.product_price }}</td>
                 {% endcomment %}
                 <td class="quantity">
-                  {% if item.product.quantity >= item.product_qty %}
+                  {% if item.variation.quantity_variant >= item.product_qty %}
                   <input
                     type="hidden"
-                    value="{{ item.product.id }}"
+                    value="{{ item.variation.id }}"
                     class="prod_id"
                   />
                   {% csrf_token %}
@@ -136,7 +137,7 @@
                       class="quantity form-control input-number quantity_id"
                       value="{{ item.product_qty }}"
                       min="1"
-                      max="{{ item.product.quantity }}"
+                      max="{{ item.variation.quantity_variant }}"
                     />
                     <div class="input-group-append">
                       <button
@@ -152,7 +153,13 @@
                   {% endif %}
                 </td>
 
-                <td class="price">₹{{ item.product.product_price }}</td>
+                <td class="price">
+                {% if item.variation.offer %}
+                <del class="text-danger">₹ {{item.variation.price_variant}}</del>&nbsp;
+                ₹{{item.variation.get_offer}}
+                {% else %}
+                ₹{{item.variation.price_variant}}
+              {% endif %}</td>
               </tr>
               {% endfor %} {% endif %}
             </tbody>
@@ -181,7 +188,7 @@
         <p class="d-flex total-price">
           <span>Grand Total</span>
 
-          <span id="grand_total">{{totalamount }}</span>
+          <span id="grand_total">₹{{totalamount }}</span>
           <input
             type="hidden"
             class="grand_total"
@@ -239,7 +246,7 @@
       .closest(".product_data")
       .find(".quantity_id")
       .val();
-
+      console.log(product_qty,'daxo')
     $.ajax({
       method: "POST",
       url: "{% url 'update_cart' %}",

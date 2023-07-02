@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url='login')
 def order_details(request):
-    orders =Order.objects.filter(user=request.user)
+    orders =Order.objects.filter(user=request.user).order_by('-id')
     cart = Cart.objects.all()
 
     context ={

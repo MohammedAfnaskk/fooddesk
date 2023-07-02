@@ -62,9 +62,14 @@
               <tbody>
                 {% for item in orderitems %}
                 <tr>
-                  <td class="img" style="background-image: url('{{ item.product.image.url }}');"></td>
+                  <td class="img" style="background-image: url('{{ item.variation.image_variant.url }}');"></td>
                   <td>{{ item.product.product_name }}</td>
-                  <td>{{ item.product.product_price }}</td>
+                  <td>{% if item.variation.offer %}
+                  <del class="text-danger">₹ {{item.variation.price_variant}}</del>&nbsp;
+                  ₹{{item.variation.get_offer}}
+                  {% else %}
+                  ₹{{item.variation.price_variant}}
+                  {% endif %}</td>
                   <td>{{ item.quantity }}</td>
                   <td>{{ order.total_price }}</td>
                   <td>{{ item.status }}</td>

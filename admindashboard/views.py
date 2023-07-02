@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from admindashboard.models import Product, Category
+from admindashboard.models import *
 from django.contrib import auth
 from cart.models import Order,OrderItem
 from address.models import Address
@@ -22,7 +22,7 @@ import pandas as pd
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 import csv
-
+ 
 
 
 
@@ -44,7 +44,7 @@ def dashboard(request):
 
     recent_sale = OrderItem.objects.all().order_by('-id')[:5]
 
-    today = datetime.today()
+    today = datetime.date.today()
     date_range = 7
 
     four_days_ago = today - timedelta(days=date_range)
@@ -176,7 +176,6 @@ def deleteproduct(request,prod_id):
     prod.delete()
     messages.success(request,'Product Deleted successfully')
     return redirect('productlist')
-from django.contrib.auth.decorators import login_required
  
 def orderlist(request):
     orders = OrderItem.objects.all()
@@ -299,7 +298,7 @@ def salesreport(request):
             return redirect(salesreport)
             
         if start_date == end_date:
-            date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+            date_obj = datetime.datetime.strptime(start_date, '%Y-%m-%d')
             order_items = OrderItem.objects.filter(order__created_at__date=date_obj.date())
             if order_items:
                 context.update(sales=order_items, s_date=start_date, e_date=end_date)
@@ -333,15 +332,6 @@ def salesreport(request):
             context.update(sales=order_items, s_date=start_date, e_date=end_date)
         else:
             messages.error(request, 'No data found')
-            
- 
-            
-            
-            
-            
-            
-            
-    
    
     # Check if the user requested a download
     if request.GET.get('download') == '1':
@@ -351,7 +341,7 @@ def salesreport(request):
         order_items = OrderItem.objects.filter(order__created_at__date__gte=start_date, order__created_at__date__lte=end_date)
 
         # Create a list to store the table data
-        table_data = [['ID', 'Date', 'Customer', 'Product Name', 'Quantity', 'Price']]
+        table_data = [['ID', 'Date', 'Customer', 'Product Name', 'Quantity', 'Total Price']]
    
         # Populate the table data with the relevant sales data
         for item in order_items:
@@ -411,7 +401,222 @@ def salesreport(request):
 
 
 
+
+def addproduct_variant(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
+
+    if request.method == 'POST':
+        product_nam = request.POST['product_variant']
+        size = request.POST['size']
+        image = request.FILES.get('image_variant', None)
+        quantity = request.POST.get('quantity_variant')
+        price = request.POST.get('price_variant')
+        offer = request.POST.get('offer')
+
+
+        # Validation
+        if offer == 'No offer':
+            offer_id = None
+        else:
+            offer_id = Offer.objects.get(id=offer)
+        try:
+            
+            product = Product.objects.get(id=product_nam)
+        except Product.DoesNotExist:
+            messages.error(request, 'Product does not exist')
+            return redirect('addproduct_variant')
+
+        try:
+            size_obj= Size.objects.get(id=size)
+        except Size.MultipleObjectsReturned:
+            messages.error(request, 'Multiple sizes found')
+            return redirect('addproduct_variant')
+
+        if Variation.objects.filter(product_variant=product, size=size_obj).exists():
+            messages.error(request, 'This variant already exists')
+            return redirect('addproduct_variant')
+
+        if not image:
+            messages.error(request, 'Image not uploaded')
+
+        if not quantity:
+            messages.error(request, 'Quantity is blank')
+
+        if not price:
+            messages.error(request, 'Price not included')
+            return redirect('addproduct_variant')
+
+        variation = Variation()
+        variation.product_variant = product
+        variation.size = size_obj
+        variation.quantity_variant = quantity
+        variation.price_variant = price
+        variation.image_variant = image
+        variation.offer = offer_id
+        variation.save()
+
+    context = {
+        'variation': Variation.objects.all(),
+        'size':Size.objects.all(),
+        'product':Product.objects.all(),
+        'offer':Offer.objects.all(),
+            
+    }
+    return render(request, 'admin/addproduct_variant.html', context)
+
+def edit_variation(request, variation_id):
+    if not request.user.is_superuser:
+        return redirect('signin')
+    variations = Variation.objects.filter(id = variation_id)
+  
+    try:
+        variation = Variation.objects.get(id=variation_id)
+    except Variation.DoesNotExist:
+        messages.error(request, 'Variation does not exist')
+        return redirect('addproduct_variant')
+  
+    if request.method == 'POST':
+        product_name = request.POST['product_variant']
+        size = request.POST['size']
+        image = request.FILES.get('image_variant', variation.image_variant)
+        quantity = request.POST.get('quantity_variant')
+        price = request.POST.get('price_variant')
+        offer = request.POST.get('offer')
+
+
+        # Validation
+        if offer == 'No offer':
+           offer_id = None
+        else:
+           offer_id = Offer.objects.get(id=offer)
+        try:
+            product = Product.objects.get(id=product_name)
+        except Product.DoesNotExist:
+            messages.error(request, 'Product does not exist')
+            return redirect('edit_variation', variation_id=variation_id)
+
+        try:
+            size_obj = Size.objects.get(id=size)
+        except Size.DoesNotExist:
+            messages.error(request, 'Size does not exist')
+            return redirect('edit_variation', variation_id=variation_id)
+
+        if Variation.objects.filter(product_variant=product, size=size_obj).exclude(id=variation_id).exists():
+            messages.error(request, 'This variant already exists')
+            return redirect('edit_variation', variation_id=variation_id)
+
+        if not image:
+            messages.error(request, 'Image not uploaded')
+
+        if not quantity:
+            messages.error(request, 'Quantity is blank')
+
+        if not price:
+            messages.error(request, 'Price not included')
+            return redirect('edit_variation', variation_id=variation_id)
+
+        variation.product_variant = product
+        variation.size = size_obj
+        variation.quantity_variant = quantity
+        variation.price_variant = price
+        variation.image_variant = image
+        variation.offer = offer_id
+
+        variation.save()
+
+        messages.success(request, 'Variation updated successfully.')
+    context = {
+        'variation':variations,
+        'size':Size.objects.all(),
+        'product':Product.objects.all(),
+        'offer':Offer.objects.all(),
+                
+     }
+    return render(request, 'admin/editvariant.html' , context)
  
+
+
+
+# Delete Variations
+def delete_variation(request, variation_id):
+    variation = Variation.objects.get(id = variation_id)
+    variation.delete()
+    messages.success(request,'Product Deleted successfully')
+    return redirect('Product_Variant_list')
+
+def Product_Variant_list(request):
+    context ={
+        'var':Variation.objects.all().order_by('id')
+    }
+    return render(request, 'admin/variant_list.html', context)
+
+# offer
+def adminoffer(request):
+    context = {
+        'offer' : Offer.objects.all()
+    }
+
+    return render (request,'Admin/offer.html',context)
+
+
+def addoffer(request):
+    if request.method =='POST': 
+        ordername = request.POST.get('ordername')
+        discount = request.POST.get('discount')
+        if ordername.strip() == '':
+            messages.error(request, "Can't blank order name")
+            return redirect('adminoffer')
+        if discount.strip() =='':
+            messages.error(request, "Can't blank Discount")
+            return redirect('adminoffer')
+        offer = Offer.objects.create(offer_name=ordername,discount_amount=discount)
+        offer.save()
+        return redirect('adminoffer')
+
+def editoffer(request,offer_id):
+  if request.method == 'POST':
+    Offername = request.POST.get('Offername')
+    discount = request.POST.get('discount')
+    if Offername.strip() == '':
+        messages.error(request, "Order name cannot be blank.")
+        return redirect('adminoffer')
+    if discount.strip() == '':
+        messages.error(request, "Can't blank Offer field")
+        return redirect('adminoffer')
+    try:
+        if Offer.objects.filter(id=offer_id,offer_name = Offername).exists():
+            pass
+        else:
+            offer = Offer.objects.get(id=offer_id)
+            offer.offer_name = Offername
+            offer.save()
+            messages.success(request, "Offer name updated successfully.")
+    except Offer.DoesNotExist:
+        messages.error(request, "The specified offer does not exist.")
+        return redirect('adminoffer')
+
+    try:
+        if Offer.objects.filter(id=offer_id,discount_amount = discount).exists():
+            pass
+        else:
+            offer = Offer.objects.get(id=offer_id)
+            offer.discount_amount = discount
+            offer.save()
+            messages.success(request, "Offer Discount updated successfully.")
+        return redirect('adminoffer')
+    except Offer.DoesNotExist:
+        messages.error(request, "The specified offer does not exist.")
+        return redirect('adminoffer')
+
+def deleteoffer(request,delete_id):
+    try:
+        offer = Offer.objects.filter(id = delete_id)
+        offer.delete()
+        return redirect('adminoffer')
+    except Offer.DoesNotExist:
+        messages.error(request, "The specified offer does not exist.")
+        return redirect('adminoffer')
 
     
     

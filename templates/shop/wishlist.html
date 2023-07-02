@@ -44,21 +44,20 @@
  										</a> 
 									  </td>
 									  								
-								  <td class="image-prod"><div class="img" style="background-image:url('{{ item.product.image.url }}');"></div></td>
+								  <td class="image-prod"><div class="img" style="background-image:url('{{ item.variation.image_variant.url }}');"></div></td>
 								 
 								  <td class="product-name">
-									<h3>{{ item.product.product_name }}</h3>
-									<p>{{item.product.product_discription}}</p>
-								  </td>
+									<h3>{{ item.variation.product_variant }}</h3>
+ 								  </td>
 								  
-								  <td class="price">₹{{item.product.product_price}}</td>
+								  <td class="price">₹{{item.variation.price_variant}}</td>
 								  
 								  {% csrf_token %}
 								  
 								  <td>
-									<i class="fas fa-shopping-cart cart-icon addToCartBtn" data-prod_id="{{item.product.id}}"></i>
-									{% comment %} <input type='hidden' value="{{item.product.id}}" class="prod_id"> {% endcomment %}
-								  </td>
+									<i class="fas fa-shopping-cart cart-icon addToCartBtn var_id" data-prod_id="{{item.variation.id}}"></i>
+ 
+ 								  </td>
 								  
 								</tr><!-- END TR-->
 							  </tbody>
@@ -73,44 +72,13 @@
 			</div>
 		</section>
 
-		 
-<!-- Add this script tag to your HTML file -->
-
- 
-
-     <!-- Add this script tag to your HTML file -->
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Tm3jblTIZ4ilFwNxDXe5zB6g54tMtyEdcTNn9yYqr4pN4wbH2ON23EzT4zWb2Fkk" crossorigin="anonymous"></script>
- 
-	{% comment %} <script>
-	 document.addEventListener('DOMContentLoaded', function() {
-		  var wishlistLink = document.querySelector('.wishlist a');
-		  var heartIcon = wishlistLink.querySelector('i');
-		  var isClicked = false;
-	  
-		  wishlistLink.addEventListener('click', function(e) {
-			e.preventDefault();
-	  
-			if (isClicked) {
-			  heartIcon.style.color = 'black';
-			  heartIcon.style.background = '';
-			  heartIcon.style.border = '';
-			  isClicked = false;
-			} else {
-			  heartIcon.style.color = 'gray';
-			  heartIcon.style.background = 'white';
- 			  isClicked = true;
-			}
-		  });
-		}); 
-	  </script> {% endcomment %}
-	  
-	  <style>
-		.wishlist a i {
-		  position: relative;
-		  font-size: 24px;
-		}
- 	  
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Tm3jblTIZ4ilFwNxDXe5zB6g54tMtyEdcTNn9yYqr4pN4wbH2ON23EzT4zWb2Fkk" crossorigin="anonymous"></script>	 
+	<style>
+	.wishlist a i {
+		position: relative;
+		font-size: 24px;
+	}
+	
 		
 	.cart-icon {
 		color: black;
@@ -134,14 +102,15 @@
     $(".addToCartBtn").click(function(event) {
       event.preventDefault();
   
-      var product_id = $(this).data('prod_id');
-	  console.log(product_id,"daxo")
-      var product_qty = 1;
+      var product_id = $(this).closest(".product_data").find(".prod_id").val();
+ 	  var variation_id= $(this).closest('.product_data').find('.var_id').val();
+	  var product_qty = 1;
       var token = $('input[name=csrfmiddlewaretoken]').val();
       $.ajax({
         url: '/cart/addtocart/',
         method: 'POST',
         data: {
+          'variation_id':variation_id,
           'product_id': product_id,
           'product_qty': product_qty,
           'csrfmiddlewaretoken': token

@@ -256,64 +256,87 @@
 
   // Attach scroll event listener to trigger animations
   window.addEventListener('scroll', handleScroll);
-  // add to Cart js:
-  $(document).ready(function() {
-    $(".addToCartBtn").click(function(event) {
-      event.preventDefault();
-  
-      var product_id = $('.prod_id').val();
-      var product_qty = $(this).closest('.product_data').find('.qty-input').val();
-      var token = $('input[name=csrfmiddlewaretoken]').val();
-      $.ajax({
-        url: '/cart/addtocart/',
-        method: 'POST',
-        data: {
-          'product_id': product_id,
-          'product_qty': product_qty,
-          'csrfmiddlewaretoken': token
-        },
-        success: function(response) {
-          // Handle the successful response here
-          console.log(response);
-          alertify.success(response.status);
-        },
-      });
-    });
-  });
+  // add to Cart js: 
+</script>
 
-  //add to wishlist:
-
-    $(".addToWishlist").click(function(event) {
+{% comment %} $(document).ready(function() {
+  $(".addToCartBtn").click(function(event) {
     event.preventDefault();
 
     var product_id = $(this).closest('.product_data').find('.prod_id').val();
+    var variation_id = $(this).closest('.product_data').find('.var_id').val();
+    var product_qty = $(this).closest('.product_data').find('.qty-input').val(); ;
     var token = $('input[name=csrfmiddlewaretoken]').val();
-
     $.ajax({
-      url: '/add_to_wishlist/',
+      url: '/cart/addtocart/',
       method: 'POST',
       data: {
+        'variation_id' : variation_id,
         'product_id': product_id,
+        'product_qty': product_qty,
         'csrfmiddlewaretoken': token
       },
       success: function(response) {
-        console.log(response)
+        // Handle the successful response here
+        console.log(response);
         alertify.success(response.status);
-
-        
-        
       },
     });
   });
-  
+});  {% endcomment %}
 
+    
+  {% comment %} //add to wishlist:
 
+  $(".addToWishlist").click(function(event) {
+  event.preventDefault();
 
+  var product_id = $(this).closest('.product_data').find('.prod_id').val();
+  var var_id = $(this).closest('.product_data').find('.var_id').val();
+  var token = $('input[name=csrfmiddlewaretoken]').val();
+  console.log(product_id,var_id)
+  $.ajax({
+    url: '/add_to_wishlist/',
+    method: 'POST',
+    data: {
+      'variation_id' : var_id
+      'product_id': product_id,
+      'csrfmiddlewaretoken': token
+    },
+    success: function(response) {
+      console.log(response)
+      alertify.success(response.status);
 
+      
+      
+    },
+  });
+}); {% endcomment %}
+<script>
+$(".addToWishlist").click(function(event) {
+  event.preventDefault();
 
+  var product_id = $(this).closest('.product_data').find('.prod_id').val();
+  var var_id = $(this).closest('.product_data').find('.var_id').val();
+  var token = $('input[name=csrfmiddlewaretoken]').val();
+  $.ajax({
+    url: '/add_to_wishlist/',
+    method: 'POST',
+    data: {
+      'variation_id': var_id, // Added a comma after this line
+      'product_id': product_id,
+      'csrfmiddlewaretoken': token
+    },
+    success: function(response) {
+      console.log(response);
+      alertify.success(response.status);
+    },
+  });
+});
 
-    </script>
-     <script src="{%static 'foodiecss/js/main.js'%}"></script>
+</script>
+
+  <script src="{%static 'foodiecss/js/main.js'%}"></script>
  
   <style>
     .search {

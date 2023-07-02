@@ -14,10 +14,16 @@ def apply_coupon(request):
         grand_total = 0 
         subtotal = 0
         for item in cart_items:
-            subtotal += item.product_qty * item.product.product_price
-            tax = subtotal * 0.05  # Assuming tax is 5% of the subtotal
-            grand_total = subtotal + tax
-         
+            if item.variation is None:
+                subtotal += item.product_qty * item.variation.price_variant
+                tax = subtotal * 0.05  # Assuming tax is 5% of the subtotal
+                grand_total = subtotal + tax
+            else:
+                subtotal += item.product_qty * item.variation.price_variant
+                if item.variation.offer is not None:
+                    subtotal -= item.variation.offer.discount_amount * item.product_qty
+                    tax = subtotal * 0.05  # Assuming tax is 5% of the subtotal
+                    grand_total = subtotal + tax
         if coupon_code.strip() == '':
             return JsonResponse({'status': 'Field is blank'})
         

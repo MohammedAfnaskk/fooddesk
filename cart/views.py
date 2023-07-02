@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 from django.contrib.auth.decorators import login_required
-from admindashboard.models import Product
+from admindashboard.models import Product, Variation
 from django.contrib.auth.models import User
 from address.models import Address
 import random
@@ -18,13 +18,20 @@ def cart(request):
     cart = Cart.objects.filter(user=user)
     subtotal = 0
     for item in cart:
-        subtotal += item.product_qty * item.product.product_price
+        if item.variation.offer is None:
+            subtotal += item.product_qty * item.variation.price_variant
+        else:
+            subtotal += item.product_qty * item.variation.price_variant
+            if item.variation.offer is not None:
+                subtotal -= item.variation.offer.discount_amount * item.product_qty
 
     tax = subtotal * 0.05  # Assuming tax is 5% of the subtotal
     totalamount = subtotal + tax
+
+        
     context = {
         'cart': cart,
-         'subtotal': subtotal,
+        'subtotal': subtotal,
         'tax': tax,
         'totalamount': totalamount
     }
@@ -34,18 +41,20 @@ def cart(request):
 def addtocart(request):
     if request.method  == 'POST':
         if request.user.is_authenticated:
+            var_id          = int(request.POST.get('variation_id'))
             prod_id          = int(request.POST.get('product_id'))
             product_check    = Product.objects.get(id=prod_id)
+            variation    = Variation.objects.get(id=var_id)
             if product_check:
-                if Cart.objects.filter(user=request.user.id, product_id=prod_id):
+                if Cart.objects.filter(user=request.user.id, product_id=prod_id,variation =var_id):
                     return JsonResponse({"status": "Product Already in Cart"})
                 else:
                     prod_qty = int(request.POST.get('product_qty'))
-                    if product_check.quantity >= prod_qty:
-                        Cart.objects.create(user=request.user, product_id=prod_id, product_qty=prod_qty)
+                    if variation.quantity_variant >= prod_qty:
+                        Cart.objects.create(user=request.user, product_id=prod_id,variation = variation, product_qty=prod_qty)
                         return JsonResponse({'status': "Product added successfully"})
                     else:
-                        return JsonResponse({'status': "Only " + str(product_check.quantity) + " quantity available"})
+                        return JsonResponse({'status': "Only " + str(variation.quantity_variant) + " quantity available"})
             else:
                 return JsonResponse({'status': "No such product found"})
         else:
@@ -54,18 +63,22 @@ def addtocart(request):
  
 def update_cart(request):
     if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        if (Cart.objects.filter(user=request.user, product=product_id)):
+        variation_id = request.POST.get('product_id')
+        if (Cart.objects.filter(user=request.user, variation=variation_id)):
             prod_qty = request.POST.get('product_qty')
-            cart = Cart.objects.get(product=product_id, user=request.user)
-            cartes = cart.product.quantity
+            cart = Cart.objects.get(variation=variation_id, user=request.user)
+            cartes = cart.variation.quantity_variant
             if int(cartes) >= int(prod_qty):
                 cart.product_qty = prod_qty
                 cart.save()
                 carts = Cart.objects.filter(user = request.user).order_by('id')
                 total_price = 0
                 for item in carts:
-                    total_price = total_price + item.product.product_price * item.product_qty
+                    if item.variation.offer == None:
+                       total_price = total_price + item.variation.price_variant * item.product_qty
+                    else:
+                        total_price = total_price + item.variation.price_variant * item.product_qty
+                        total_price = total_price - item.variation.offer.discount_amount * item.product_qty
                     
                 return JsonResponse({'status': 'Updated successfully','sub_total':total_price,})
             else:
@@ -90,10 +103,18 @@ def checkout(request):
     cart = Cart.objects.filter(user=request.user)
 
     subtotal = 0
+   
     for item in cart:
-        subtotal += item.product_qty * item.product.product_price
+        if item.variation.offer is None:
+            subtotal += item.product_qty * item.variation.price_variant
+        else:
+            subtotal += item.product_qty * item.variation.price_variant
+            if item.variation.offer is not None:
+                subtotal -= item.variation.offer.discount_amount * item.product_qty
+
     tax = subtotal * 0.05  # Assuming tax is 5% of the subtotal
     totalamount = subtotal + tax
+
     usercoupon = Usercoupon.objects.filter(user=request.user).last()
     coupons = Coupon.objects.all()
 
@@ -135,7 +156,12 @@ def place_order(request):
         cart_items = Cart.objects.filter(user=user)
         subtotal = 0
         for item in cart_items:
-            subtotal += item.product_qty * item.product.product_price
+            if item.variation.offer is None:
+               subtotal += item.product_qty * item.variation.price_variant
+            else:
+                subtotal += item.product_qty * item.variation.price_variant
+                if item.variation.offer is not None:
+                    subtotal -= item.variation.offer.discount_amount * item.product_qty
 
         tax = subtotal * 0.05
 
@@ -166,16 +192,18 @@ def place_order(request):
         neworderitems = Cart.objects.filter(user=request.user)
         for item in neworderitems:
             product = item.product  # Retrieve the product instance
+            variation = item.variation
             OrderItem.objects.create(
                 order=new_order,
                 product=product,  # Assign the product instance
-                price=product.product_price,  # Set the price
+                variation = variation,
+                price=variation.price_variant,  # Set the price
                 quantity=item.product_qty
             )
 
             # Decrease product quantity from available stock
-            order_product = Product.objects.filter(id=item.product.id).first()
-            order_product.quantity -= item.product_qty
+            order_product = Variation.objects.filter(id=item.variation.id).first()
+            order_product.quantity_variant -= item.product_qty
             order_product.save()
         payment_mode = request.POST.get('payment_mode')
         if (payment_mode == "Razorpay"):
@@ -194,9 +222,20 @@ def razarypaycheck(request):
     total_price = 0
     grand_total = 0
     for item in cart:
-        total_price += item.product.product_price * item.product_qty
+        if item.variation.offer is None:
+           total_price += item.variation.price_variant * item.product_qty
+        else:
+            total_price += item.variation.price_variant * item.product_qty
+            if item.variation.offer is not None:
+                total_price -= item.variation.offer.discount_amount * item.product_qty      
     tax = total_price * 0.05 
     grand_total += total_price+tax
+    if Usercoupon.objects.filter(user = request.user).exists():
+        usercoupon = Usercoupon.objects.get(user = request.user)
+        grand_total= usercoupon.total_price
+        usercoupon.delete()
+    else:
+        grand_total = total_price + tax
     return JsonResponse({'total_price': grand_total})
 
  

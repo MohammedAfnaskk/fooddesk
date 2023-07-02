@@ -318,34 +318,16 @@
 </html>
           </div>
 
-          <div class="col-lg-5 cart-wrap">
-            <h4>Coupon Code</h4>
-
-            <form
-              action="{%url 'apply_coupon'%}"
-              id="coupon-form"
-              class="info"
-              method="POST"
-            >
-              {%csrf_token%}
-
-              <form action="#" class="subscribe-form">
-                <div class="form-group d-flex">
-                  <input
-                    type="text"
-                    id="coupon-input"
-                    class="form-control text-left px-3"
-                    placeholder="coupon code"
-                  />
-                  <input
-                    type="submit"
-                    value="Apply Coupon"
-                    class="submit px-3"
-                    style="background: #ff8511"
-                  />
-                </div>
-              </form>
-            </form>
+        <div class="col-lg-5 cart-wrap">
+          <h4>Coupon Code</h4>
+          <form action="{% url 'apply_coupon' %}" id="coupon-form" class="info" method="POST">
+            {% csrf_token %}
+            <div class="form-group d-flex">
+              <input type="text" id="coupon-input" class="form-control text-left px-3" placeholder="coupon code" name="coupon_code">
+              <input type="submit" value="Apply Coupon" class="submit px-3" style="background: #ff8511">
+            </div>
+          </form>
+ 
 
             <div class="col-lg-4-md-12 d-flex mb-5 pt-5">
               <div class="cart-detail cart-total p-3 p-md-4">
@@ -495,10 +477,9 @@
                   <input type="text" class="form-control" id="country1" name="country1" value="{{address.country}}">
                 </div>
                 <!-- Add more fields or customize the form as needed -->
-            </div>
-            <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" id="saveChangesButton">Save changes</button>
-            </form>
+               <div class="modal-footer">
+               <button type="submit" class="btn btn-primary" id="saveChangesButton">Save changes</button>
+             </form>
             </div>
           </div>
         </div>
@@ -613,7 +594,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+ 
 <script>
   $(document).ready(function () {
     $("#address-toggle").change(function () {
@@ -672,6 +653,7 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <script>
   $(document).ready(function () {
 
@@ -723,7 +705,6 @@
               "handler": function (responseb){
                 alert(responseb.razorpay_payment_id);
                   data = {
-                    
                     "payment_mode" : "Razorpay",
                     "payment_id" : responseb.razorpay_payment_id,
                     "address-toggle": selectedAddressId,
@@ -780,6 +761,7 @@
 
   });
 </script> 
+
 <script>
   var cpnBtn = document.getElementById("cpnBtn");
   var cpnCode = document.getElementById("cpnCode");
@@ -794,4 +776,5 @@
 </script>
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
  {% endblock %}

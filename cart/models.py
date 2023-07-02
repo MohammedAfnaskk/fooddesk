@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,User
-from admindashboard.models import Product
+from admindashboard.models import Product, Variation
 from address.models import Address
 
 # Create your models here.
@@ -10,6 +10,7 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_qty = models.PositiveIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    variation = models.ForeignKey(Variation, on_delete=models.CASCADE)
     
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,6 +32,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete= models.CASCADE)
     product = models.ForeignKey(Product, on_delete= models.CASCADE)
+    variation = models.ForeignKey(Variation, on_delete=models.CASCADE)
     price = models.FloatField(null=True)
     quantity = models.IntegerField(null=True)
     orderstatus =(
