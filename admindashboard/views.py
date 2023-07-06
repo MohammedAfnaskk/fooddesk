@@ -387,7 +387,7 @@ def salesreport(request):
     #         ])
     #     return response
 
-    return render(request, 'admin/salesreport.html', context)
+    return render(request, 'Admin/salesreport.html', context)
 
 
 
@@ -454,7 +454,7 @@ def addproduct_variant(request):
         'offer':Offer.objects.all(),
             
     }
-    return render(request, 'admin/addproduct_variant.html', context)
+    return render(request, 'Admin/addproduct_variant.html', context)
 
 def edit_variation(request, variation_id):
     if not request.user.is_superuser:
@@ -524,7 +524,7 @@ def edit_variation(request, variation_id):
         'offer':Offer.objects.all(),
                 
      }
-    return render(request, 'admin/editvariant.html' , context)
+    return render(request, 'Admin/editvariant.html' , context)
  
 
 
@@ -544,7 +544,7 @@ def Product_Variant_list(request):
     context ={
         'var':Variation.objects.all().order_by('id')
     }
-    return render(request, 'admin/variant_list.html', context)
+    return render(request, 'Admin/variant_list.html', context)
 
 # offer
 def adminoffer(request):
