@@ -544,7 +544,7 @@ def Product_Variant_list(request):
     context ={
         'var':Variation.objects.all().order_by('id')
     }
-    return render(request, 'Admin/variant_list.html', context)
+    return render(request, 'Admin/Variant_list.html', context)
 
 # offer
 def adminoffer(request):
