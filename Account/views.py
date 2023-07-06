@@ -64,7 +64,6 @@ def signup(request):
             name =request.POST['first_name']
             username = request.POST['username']
             email = request.POST['emailid']
-            mobile_number= request.POST['mobile_number']
             password = request.POST['password']
             comfirmpassword = request.POST['comfirmpassword']
             password_validate = ValidatePassword(password)
@@ -89,13 +88,10 @@ def signup(request):
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'User name already exists')
                 return redirect('signup')
-            
-            if not re.match(r'^\d{10}$', mobile_number):
-                messages.error(request, 'Invalid mobile number. Please enter a 10-digit mobile number.')
-                return redirect('signup')
+        
             
             else:
-                user = User.objects.create_user(username=username,password=password,first_name=name,email=email,mobile_number=mobile_number)
+                user = User.objects.create_user(username=username,password=password,first_name=name,email=email)
                 user.is_active=False
                 user.save()
                 
