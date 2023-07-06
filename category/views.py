@@ -20,12 +20,13 @@ from django.contrib import messages
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def home(request):
-    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
-    cart_count = cart.count() if cart else 0
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user) 
+        cart_count = cart.count() if cart else 0
     dict_list={
      'prod':Variation.objects.all(),
      'cart_count': cart_count,
-
     }
     return render(request,"home.html", dict_list)
 
@@ -53,8 +54,10 @@ def shop(request, category_slug=None):
     paginator = Paginator(products, 4)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
-    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
-    cart_count = cart.count() if cart else 0
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+        cart_count = cart.count() if cart else 0
     dict_list = {
         'categories': categories,
         'prod': paged_products,
@@ -71,8 +74,10 @@ def single_product(request, var_id):
         variation = Variation.objects.get(id=var_id)
     except Variation.DoesNotExist:
             return render(request, "home.html")
-    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
-    cart_count = cart.count() if cart else 0  
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+        cart_count = cart.count() if cart else 0  
     if request.method == 'POST':
             size_id = request.POST.get('size_id')
             prod_id = request.POST.get('prod_id')
@@ -96,8 +101,10 @@ def single_product(request, var_id):
 @login_required(login_url='login') 
 def wishlist(request):
   wishlist = Wishlist.objects.filter(user = request.user)
-  cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
-  cart_count = cart.count() if cart else 0 
+  cart_count = 0
+  if request.user.is_authenticated:
+    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+    cart_count = cart.count() if cart else 0 
   context ={
     'cart': cart,
     'wishlist':wishlist,
