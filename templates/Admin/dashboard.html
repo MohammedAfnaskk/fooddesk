@@ -8,7 +8,7 @@
       <h1>Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="{%url 'dashboard'%}">Home</a></li>
           <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>
@@ -144,7 +144,7 @@
                     <li><a class="dropdown-item" href="#">This Year</a></li>
                   </ul>
                 </div>
-
+ 
                 <div class="card-body">
                   <h5 class="card-title">Reports <span>/Today</span></h5>
 
@@ -162,7 +162,7 @@
                         }, {
                           name: 'Revenue',
                           data: [{% for sale in sales_by_day %}
-                            {{ sale.revenue|floatformat:2 }},
+                            {{ revenue|floatformat:2 }},
                           {% endfor %}],
                         }, {
                           name: 'Customers',
@@ -244,14 +244,14 @@
                   <td>{{sale.order.user}}</td>
                   <td>{{sale.product.product_name}}</td>
                   <td>{{sale.quantity}}</td>
-                  <td>₹ {{sale.product.product_price}}</td>
+                  <td>₹ {{sale.order.total_price}}</td>
                   {% if sale.status == 'Pending' %}
                   <td><span style="background-color: #fff2e1 !important; color: #fdac41 !important; border-radius: 0; " class="badge">{{sale.status}}</span></td>
-                  {% elif sale.status == 'Processing' %}
+                  {% elif sale.status == 'Order Confirmed' %}
                   <td><span style="background-color: #dff9ec !important; color: #39da8a !important; border-radius: 0; " class="badge">{{sale.status}}</span></td>
-                  {% elif sale.status == 'Cancelled' %}
+                  {% elif sale.status == 'cancelled' %}
                   <td><span style="background-color: #ffe4e4 !important; color: #e85a5a !important; border-radius: 0; " class="badge">{{sale.status}}</span></td>
-                  {% elif sale.status == 'Shipped' %}
+                  {% elif sale.status == 'Out for delivery' %}
                   <td><span style="background-color: #e5edfc !important; color: #6d99eb !important; border-radius: 0; " class="badge">{{sale.status}}</span></td>
                   {% elif sale.status == 'Delivered' %}
                   <td><span style="background-color: #dff9ec !important; color: #39da8a !important; border-radius: 0; " class="badge">{{sale.status}}</span></td>

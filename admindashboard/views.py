@@ -62,6 +62,7 @@ def dashboard(request):
         'top_selling':top_selling,
         'recent_sales':recent_sale,
         'sales_by_day':sales_by_day,
+        'sales_dates': sales_dates,
     }
     return render(request,'Admin/dashboard.html',context)
 
@@ -73,11 +74,15 @@ def signout(request):
  
 # user
 def userlist(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     users=User.objects.all().order_by('id')
     return render(request,"Admin/user_list.html",{'users':users})
 
 # Block User
 def blockuser(request,user_id):
+    if not request.user.is_superuser:
+        return redirect('signin')
     user = User.objects.get(id=user_id)
     if user.is_active:
         user.is_active = False
@@ -88,6 +93,8 @@ def blockuser(request,user_id):
     return redirect("userlist")
 #product
 def productlist(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     dict_list={
         'prod':Product.objects.all()
      }
@@ -95,6 +102,8 @@ def productlist(request):
 
 # Add product
 def addproduct(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     if request.method == 'POST':
         name= request.POST['product_name']
         category_id = request.POST.get('category')
@@ -131,7 +140,13 @@ def addproduct(request):
     return render(request,"Admin/addproduct.html",context) 
 # edit product
 def editproduct(request, prod_id):
-    prd = Product.objects.get(id=prod_id)
+    if not request.user.is_superuser:
+        return redirect('signin')
+    try:
+       prd = Product.objects.get(id=prod_id)
+    except Product.DoesNotExist:
+        messages.error(request, 'orderitem_not_found')
+        return redirect('productlist')
 
     if request.method == 'POST':
         name = request.POST['product_name']
@@ -172,12 +187,16 @@ def editproduct(request, prod_id):
 
 # delete product
 def deleteproduct(request,prod_id):
+    if not request.user.is_superuser:
+        return redirect('signin')
     prod = Product.objects.get(id=prod_id)
     prod.delete()
     messages.success(request,'Product Deleted successfully')
     return redirect('productlist')
  
 def orderlist(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     orders = OrderItem.objects.all()
     context = {
         'orders': orders
@@ -187,6 +206,8 @@ def orderlist(request):
  
 
 def update_status(request, order_item_id):
+    if not request.user.is_superuser:
+        return redirect('signin')
     order_item = OrderItem.objects.get(id=order_item_id)
 
     if request.method == 'POST':
@@ -196,6 +217,8 @@ def update_status(request, order_item_id):
         return redirect('orderlist')
 
 def category(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     context={
         'catg':Category.objects.all()
     }
@@ -227,25 +250,16 @@ def addcategory(request):
     return render(request,'Admin/addcategory.html')
  
 
-def editcategory(request, editcategory_id):
-    if not request.user.is_superuser:
-        return redirect('signin')
-    
-    category_obj = Category.objects.get(id=editcategory_id)
-    
-    if request.method == 'POST':
-        # Handle form submission for editing the category
-        # ... your code here ...
-        return redirect('category')  # Redirect to the category page after editing
-
-    return render(request, 'editcategory.html', {'category': category_obj})
-
+ 
  
 def editcategory(request, editcategory_id):
     if not request.user.is_superuser:
         return redirect('signin')
-    category_obj = Category.objects.get(id=editcategory_id)
-
+    try:
+       category_obj = Category.objects.get(id=editcategory_id)
+    except Category.DoesNotExist:
+        messages.error(request, 'editcategory_not_found')
+        return redirect('category')
     if request.method == 'POST':
         name = request.POST['category_name']
         description = request.POST['category_description']
@@ -540,12 +554,16 @@ def edit_variation(request, variation_id):
 
 # Delete Variations
 def delete_variation(request, variation_id):
+    if not request.user.is_superuser:
+        return redirect('signin')
     variation = Variation.objects.get(id = variation_id)
     variation.delete()
     messages.success(request,'Product Deleted successfully')
     return redirect('Product_Variant_list')
 
 def Product_Variant_list(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     context ={
         'var':Variation.objects.all().order_by('id')
     }
@@ -553,6 +571,8 @@ def Product_Variant_list(request):
 
 # offer
 def adminoffer(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     context = {
         'offer' : Offer.objects.all()
     }
@@ -561,6 +581,8 @@ def adminoffer(request):
 
 
 def addoffer(request):
+    if not request.user.is_superuser:
+        return redirect('signin')
     if request.method =='POST': 
         ordername = request.POST.get('ordername')
         discount = request.POST.get('discount')
@@ -575,6 +597,8 @@ def addoffer(request):
         return redirect('adminoffer')
 
 def editoffer(request,offer_id):
+  if not request.user.is_superuser:
+    return redirect('signin')
   if request.method == 'POST':
     Offername = request.POST.get('Offername')
     discount = request.POST.get('discount')
@@ -610,6 +634,8 @@ def editoffer(request,offer_id):
         return redirect('adminoffer')
 
 def deleteoffer(request,delete_id):
+    if not request.user.is_superuser:
+        return redirect('signin')
     try:
         offer = Offer.objects.filter(id = delete_id)
         offer.delete()

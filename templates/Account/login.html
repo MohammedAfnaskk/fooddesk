@@ -37,15 +37,15 @@
             <form action="#" method="POST">
               {% csrf_token %}
               <div class="form-group first">
-                {% if messages %}
+                  {% if messages %}
 
-                {% for message in messages %}
-          
-                <div class="text-center text-danger pt-3"></button>
-                    <strong>{{message}}</strong>
-                </div>
-                {% endfor %}
-                {%endif%}
+                  {% for message in messages %}
+            
+                  <div id="error-message"  class="text-center text-danger pt-3"></button>
+                      <strong>{{message}}</strong>
+                  </div>
+                  {% endfor %}
+                  {%endif%}
                 <label for="username">Username</label>
                 <input type="text" class="form-control" placeholder="Username" id="username" name="username">
               </div>
@@ -73,16 +73,24 @@
         </div>
       </div>
     </div>
-
-    
   </div>
     
-    
-
     <script src="{%static 'logincss/js/jquery-3.3.1.min.js'%}"></script>
     <script src="{%static 'logincss/js/popper.min.js'%}"></script>
     <script src="{%static 'logincss/js/bootstrap.min.js'%}"></script>
     <script src="{%static 'logincss/js/main.js'%}"></script>
+    <script>
+      // Wait for the document to be ready
+    $(document).ready(function() {
+    // Set a timeout to remove the error message after 5 seconds (5000 milliseconds)
+     setTimeout(function() {
+      $('#error-message').fadeOut('slow', function() {
+          $(this).remove();
+      });
+    }, 5000); // Adjust the duration as needed
+    });
+    
+    </script>
   </body>
 </html>
  

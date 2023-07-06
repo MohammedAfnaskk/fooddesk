@@ -1,104 +1,6 @@
-{% comment %} {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>signup</title>
-	<!-- Mobile Specific Metas -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-	<!-- Font-->
-	<link rel="stylesheet" type="text/css" href="{%static 'signupcss/css/nunito-font.css'%}">
-	<!-- Main Style Css -->
-    <link rel="stylesheet" href="{%static 'signupcss/css/style.css'%}"/>
-</head>
-<style>
-    body {
-      background-color: black;
-    }
-    .page-content {
-      height: 750px;
-    }
-    .form-v6-content {
-      background-image: url('{% static "foodiecss/images/bg_35.jpg" %}');
-    }
-    .form-left {
-      width: 30px;
-    }
-     
-  </style>
-<body class="form-v7" style="background-color: black;">
-	<div class="page-content"style="height: 750px;">
-		<div class="form-v6-content" style="height: 720px; width: 450px;">
-			<div class="form-left" style="width: 30px;">
-			</div>
-			{% if otp %}
-			<form class="row contact_form" method="post" novalidate="novalidate">
-				{% csrf_token %}
-				<div class="col-md-12 form-group p_star">
-					<input type="email" class="form-control" id="name" name="email" value="{{ usr.email }}" placeholder="Firstname" hidden>
-				</div>
-				<div class="col-md-12 form-group p_star">
-					<input type="number" class="form-control" id="name" name="otp" value="" placeholder="Enter Your OTP..!">
-				</div>
-				<div class="col-md-12 form-group">
-					<button type="submit" value="submit" class="btn btn-danger">Submit</button>  
-				</div>
-			</form>
-		{% else %}
-		
-			
-			<form class="form-detail" action="#" method="POST">
-				{% csrf_token %}
-    
-				<h2>SIGN UP</h2>
-						
-				{% if messages %}
-
-				{% for message in messages %}
-
-				<div class="text-center text-danger pt-3"></button>
-					<strong>{{message}}</strong>
-				</div>
-				{% endfor %}
-				{%endif%}
-					
-				<div class="form-row">
-					<input type="text" name="first_name" id="first_name" class="input-text" placeholder="Your Name" required  name='first_name'>
-				</div>
-                <div class="form-row">
-					<input type="text" name="username" id="username" class="input-text" placeholder="Username" required name='username'>
-				</div>
-				<div class="form-row">
-					<input type="text" name="emailid" id="emailid" class="input-text" placeholder="Email Address" required pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}"name='emailid'>
-				</div>
-				<div class="form-row">
-					<input type="text" name="mobile_number" id="mobile_number" class="input-text" placeholder="Mobile Number" required  name='mobile_number'>
-				</div>
-				<div class="form-row">
-					<input type="password" name="password" id="password" class="input-text" placeholder="Password" required name='password'>
-				</div>
-				<div class="form-row">
-					<input type="password" name="comfirmpassword" id="comfirmpassword" class="input-text" placeholder="Comfirm Password" required name='comfirmpassword'>
-				</div>
-				<div class="form-row-last mr-3">
-					<input type="submit" name="register" class="register" value="SIGN UP">
-				</div>
-                
-              <div class="d-flex mb-5 align-items-center">
-                <label class="control control--checkbox1 mb-0"><span class="captions text-dark" >Already Have An Account? <a href="{%url 'login'%}">Login </a> </span>
-              </div>
-        
-			</form>
-		</div>
-		{% endif %}
-	</div>
-</body> 
-</html> {% endcomment %}
-{%load static%}
-
-<!doctype html>
+{% load static %}
+ <!doctype html>
 <html lang="en">
 <head>
   <!-- Required meta tags -->
@@ -119,7 +21,6 @@
   <link rel="stylesheet" href="{%static 'logincss/css/style.css'%}">
 
   <title>Signup Fooddesk</title>
-	 
 </head>
 <body style ="height:750px;">
 
@@ -138,7 +39,7 @@
 
 			{% for message in messages %}
 	  
-			<div class="text-center text-danger pt-3"></button>
+			<div id="error-message" class="text-center text-danger pt-3"></button>
 				<strong>{{message}}</strong>
 			</div>
 			{% endfor %}
@@ -147,9 +48,7 @@
 			{% if otp %}
 			<form class="row contact_form" method="post" novalidate="novalidate">
 				{% csrf_token %}
-				<div class="col-md-12 form-group p_star">
-					<input type="email" class="form-control" id="name" name="email" value="{{ usr.email }}" placeholder="Firstname" hidden>
-				</div>
+				 
 				<div class="col-md-12 form-group p_star">
 					<input type="number" class="form-control" id="name" name="otp" value="" placeholder="Enter Your OTP..!">
 				</div>
@@ -180,13 +79,13 @@
 			
 		    <div class="form-group last">
 			<label for="password">Password</label>
-			<input type="password" id="password" class="form-control" style =" height: 40px;" placeholder="Password" required name='password'>
+			<input type="text" id="password" class="form-control" style =" height: 40px;" placeholder="Password" required name='password'>
 		    </div>
            
 			
 		    <div class="form-group last">
 			<label for="password">Comfirm Password</label>
-			<input type="password"  id="comfirmpassword" class="form-control" style =" height: 40px;" placeholder="Comfirm Password" required name='comfirmpassword'>
+			<input type="text"  id="comfirmpassword" class="form-control" style =" height: 40px;" placeholder="Comfirm Password" required name='comfirmpassword'>
 		   </div>
 
  			<input type="submit" name="register" class="btn btn-block btn-primary" value="SIGN UP">
@@ -201,15 +100,24 @@
 	</div>
   </div>
 
-  		{% endif %}
+{% endif %}
 
 </div>
-  
-  
-
   <script src="{%static 'logincss/js/jquery-3.3.1.min.js'%}"></script>
   <script src="{%static 'logincss/js/popper.min.js'%}"></script>
   <script src="{%static 'logincss/js/bootstrap.min.js'%}"></script>
   <script src="{%static 'logincss/js/main.js'%}"></script>
+  <script>
+	// Wait for the document to be ready
+  $(document).ready(function() {
+  // Set a timeout to remove the error message after 5 seconds (5000 milliseconds)
+   setTimeout(function() {
+	$('#error-message').fadeOut('slow', function() {
+		$(this).remove();
+	});
+  }, 5000); // Adjust the duration as needed
+  });
+  
+  </script>
 </body>
-</html>
+</html> 

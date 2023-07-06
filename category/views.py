@@ -13,44 +13,24 @@ from category.models import Wishlist
 from django.core.paginator import  EmptyPage,PageNotAnInteger,Paginator
 from django.db.models import Q
 from admindashboard.models import Variation,Size
+from django.contrib import messages
 
 
 # Create your views here.
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def home(request):
-  
-  cart = Cart.objects.all()
+    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+    cart_count = cart.count() if cart else 0
+    dict_list={
+     'prod':Variation.objects.all(),
+     'cart_count': cart_count,
 
-  dict_list={
-    'cart': cart,
-    'prod':Variation.objects.all()
-  }
-  return render(request,"home.html", dict_list)
+    }
+    return render(request,"home.html", dict_list)
 
 
-# def shop(request,category_slug = None):
-#   categories =None
-#   if category_slug != None:
-#     categories = get_object_or_404(Category,slug =category_slug)
-#     product = Product.objects.filter(category =categories)
-#     paginator =Paginator(product, 2)
-#     page = request.GET.get('page')
-#     paged_products =paginator.get_page(page)
-  
-#   else:
-#     cart = Cart.objects.all()
-#     product = Variation.objects.all()
-#     paginator =Paginator(product, 4)
-#     page = request.GET.get('page')
-#     paged_products =paginator.get_page(page)
-#     dict_list={
-#        'cart': cart,
-#       'prod':  paged_products,
-   
-#     } 
-#   return render(request,"shop/shop.html", dict_list)
-
+ 
 
 def shop(request, category_slug=None):
     categories = None
@@ -73,48 +53,56 @@ def shop(request, category_slug=None):
     paginator = Paginator(products, 4)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
-
+    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+    cart_count = cart.count() if cart else 0
     dict_list = {
         'categories': categories,
         'prod': paged_products,
         'filter': filter,
+        'cart_count': cart_count,
+
         }
 
     return render(request, "shop/shop.html", dict_list)
 
 
 def single_product(request, var_id):
-  variation = get_object_or_404(Variation, id=var_id)
-  cart = Cart.objects.all()
-  
-  if request.method == 'POST':
-        size_id = request.POST.get('size_id')
-        prod_id = request.POST.get('prod_id')
-        print(size_id,prod_id,'daxo')
-        variation = Variation.objects.get(size=size_id, product_variant=prod_id)
-        variation_quantity = variation.quantity_variant
-        return JsonResponse({'variation_id':variation.id, 'variation_quantity':variation_quantity})
-  
-  variation_list = Variation.objects.filter(product_variant=variation.product_variant.id)
-  context = {
+    try:
+        variation = Variation.objects.get(id=var_id)
+    except Variation.DoesNotExist:
+            return render(request, "home.html")
+    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+    cart_count = cart.count() if cart else 0  
+    if request.method == 'POST':
+            size_id = request.POST.get('size_id')
+            prod_id = request.POST.get('prod_id')
+            variation = Variation.objects.get(size=size_id, product_variant=prod_id)
+            variation_quantity = variation.quantity_variant
+            return JsonResponse({'variation_id':variation.id, 'variation_quantity':variation_quantity})
+    
+    variation_list = Variation.objects.filter(product_variant=variation.product_variant.id)
+    context = {
         'cart': cart,   
         'sizes': Size.objects.all(),
         'variations':variation,
         'variation_list': variation_list,
+        'cart_count': cart_count,
+
     }
 
-  return render(request, "shop/buyshop.html", context)
+    return render(request, "shop/buyshop.html", context)
 
  
 @login_required(login_url='login') 
 def wishlist(request):
   wishlist = Wishlist.objects.filter(user = request.user)
-  cart = Cart.objects.all()
-
+  cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+  cart_count = cart.count() if cart else 0 
   context ={
     'cart': cart,
     'wishlist':wishlist,
- 
+    'cart_count': cart_count,
+
   }
   return render(request,"shop/wishlist.html", context)
 
@@ -153,6 +141,8 @@ def delete_wishlist_item(request):
       
 # def razorpaycheck(request):
 def search(request):
+    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+    cart_count = cart.count() if cart else 0  
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:
@@ -161,11 +151,13 @@ def search(request):
 
             context = {
                 'prod': products,
+                'cart_count': cart_count,
+
             }
             return render(request, "shop/shop.html", context)
           
- 
 
+ 
 
   
   

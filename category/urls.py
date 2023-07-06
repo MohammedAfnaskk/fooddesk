@@ -9,6 +9,7 @@ urlpatterns = [
     path('add_to_wishlist/',views.add_to_wishlist,name='add_to_wishlist'),
     path('delete_wishlist_item/',views.delete_wishlist_item,name='delete_wishlist_item'),
     path('shop/search/',views.search,name ="search"),
+ 
     # path('variations/', views.variation_list, name='variation_list'),
 
  

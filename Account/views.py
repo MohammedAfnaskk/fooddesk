@@ -8,6 +8,7 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 
 #validation
@@ -52,13 +53,13 @@ def signup(request):
                 usr.is_active=True
                 usr.save()
                 auth.login(request,usr)
-                messages.success(request,'Accouunt is created for {usr.email}')
+                messages.success(request,'Accouunt is created')
                 UserOTP.objects.filter(user=usr).delete()
-                return redirect('home')
+                return redirect("home")
             else:
                 messages.error(request,'you enterd wrong otp try again')
                 return render(request,'Account/signup.html',{'otp':True,'usr':usr}) 
-    
+           
         else:    
             name =request.POST['first_name']
             username = request.POST['username']
@@ -66,6 +67,18 @@ def signup(request):
             mobile_number= request.POST['mobile_number']
             password = request.POST['password']
             comfirmpassword = request.POST['comfirmpassword']
+            password_validate = ValidatePassword(password)
+         
+            
+            if password == comfirmpassword:
+                if password_validate is False:  
+                    messages.info(request,'Enter Strong Password')
+                    return redirect('signup')
+                
+            if User.objects.filter(email=email).exists():
+               messages.error(request, "Email  already exists.")
+               return redirect('signup')
+
             
             if username.strip() == '' or password.strip() == '' or comfirmpassword.strip() == '' or email.strip() == '':
                 messages.error(request,"Fields can't be blank")
@@ -111,7 +124,6 @@ def logout(request):
     
  
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
- 
 def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -132,37 +144,79 @@ def signin(request):
 def signupadmin(request):
     if not request.user.is_superuser:
         return redirect('home')
-    
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        username = request.POST.get('username')
-        email = request.POST.get('email_id')
-        password = request.POST.get('password')
-        confirmpassword = request.POST.get('confirmpassword')
+    if request.method=='POST':
+        get_otp=request.POST.get('otp1')
         
-        if username.strip() == '' or password.strip() == '' or confirmpassword.strip() == '':
-            messages.error(request, "Fields can't be blank")
-            return redirect('signupadmin')
+        if get_otp: 
+            get_email=request.POST.get('email')
+            usr=User.objects.filter(email=get_email).last()
+            if int(get_otp)==UserOTP.objects.filter(user=usr).last().otp:
+                usr.is_active=True
+                usr.save()
+                auth.login(request,usr)
+                messages.success(request,'Accouunt is created')
+                UserOTP.objects.filter(user=usr).delete()
+                return redirect('dashboard')
+            else:
+                messages.error(request,'you enterd wrong otp try again')
+                return render(request,'Admin/signupadmin.html',{'otp1':True,'usr':usr}) 
         
-        if password != confirmpassword:
-            messages.error(request, "Passwords don't match")
-            return redirect('signupadmin')
+        else:
+            first_name = request.POST.get('first_name')
+            username = request.POST.get('username')
+            email = request.POST.get('email_id')
+            password = request.POST.get('password')
+            confirmpassword = request.POST.get('confirmpassword')
+            password_validate = ValidatePassword(password)
         
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'Username already exists')
-            return redirect('signupadmin')
-        
-        user = User.objects.create_user(username=username, password=password, first_name=first_name , email=email, is_superuser=True)
-        user.save()
-        messages.success(request, "User created successfully")
-        return redirect('signin')
+            
+            
+
+            
+            if username.strip() == '' or password.strip() == '' or confirmpassword.strip() == '':
+                messages.error(request, "Fields can't be blank")
+                return redirect('signupadmin')
+            
+            
+            if password == confirmpassword:
+                if password_validate is False:  
+                    messages.info(request,'Enter Strong Password')
+                    return redirect('signupadmin')
+                
+            if User.objects.filter(email=email).exists():
+               messages.error(request, "Email  already exists.")
+               return redirect('signupadmin')
+           
+            if password != confirmpassword:
+                messages.error(request, "Passwords don't match")
+                return redirect('signupadmin')
+            
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Admin name already exists')
+                return redirect('signupadmin')
+            else:
+                user = User.objects.create_user(username=username, password=password, first_name=first_name , email=email, is_superuser=True)
+                user.save()
+                  
+                user_otp=random.randint(100000,999999)
+                UserOTP.objects.create(user=user ,otp=user_otp)
+                
+                mess=f'Hello\t{user.first_name},\nOTP to verify your account for Fooddesk is {user_otp}\nHappy Shopping..!!'
+                send_mail(
+                        "Welcome to Fooddesk, Verify your Email",
+                        mess,
+                        settings.EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=False
+                    )
+                messages.error(request,"Please enter OTP and Finish the registration..!!")
+                return render(request,'Admin/signupadmin.html', {'otp1':True,'usr':user})
     return render(request, "Admin/signupadmin.html")
 
 
  
-    
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def forgot_password(request):
-
     if request.method=='POST':
         get_otp=request.POST.get('otp')
         if get_otp:

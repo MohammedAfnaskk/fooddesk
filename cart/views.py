@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
+from django.views.decorators.cache import cache_control
+
 from django.contrib.auth.decorators import login_required
 from admindashboard.models import Product, Variation
 from django.contrib.auth.models import User
@@ -15,6 +17,8 @@ from coupon.models  import *
 @login_required(login_url='login')
 def cart(request):
     user = request.user
+    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+    cart_count = cart.count() if cart else 0
     cart = Cart.objects.filter(user=user)
     subtotal = 0
     for item in cart:
@@ -33,7 +37,9 @@ def cart(request):
         'cart': cart,
         'subtotal': subtotal,
         'tax': tax,
-        'totalamount': totalamount
+        'totalamount': totalamount,
+        'cart_count': cart_count,
+
     }
     return render(request, "shop/cart.html", context)
 
@@ -95,13 +101,12 @@ def removeFromCart(request, cart_id):
     else:
         return redirect('cart')
     
-
- 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='login')
 def checkout(request):
     address = Address.objects.filter(customer=request.user) 
     cart = Cart.objects.filter(user=request.user)
-
+    cart_count = cart.count() if cart else 0  
     subtotal = 0
    
     for item in cart:
@@ -126,7 +131,9 @@ def checkout(request):
         'totalamount1': totalamount,
         'address': address,
         'usercoupon':usercoupon,
-        'coupons': coupons
+        'coupons': coupons,
+        'cart_count': cart_count
+
     }
  
     return render(request, "shop/checkout.html", context)
@@ -136,8 +143,8 @@ def checkout(request):
  
 
  
- 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='login')
 def place_order(request):
     if request.method == 'POST':
         new_order = Order()
@@ -217,6 +224,8 @@ def place_order(request):
        
     return HttpResponseRedirect('checkout')
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='login')
 def razarypaycheck(request):
     cart = Cart.objects.filter(user=request.user)
     total_price = 0

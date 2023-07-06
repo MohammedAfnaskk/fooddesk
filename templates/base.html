@@ -48,7 +48,7 @@
 					    </div>
 					    <div class="col-md pr-4 d-flex topper align-items-center">
 					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">foodieshop@gmail.com</span>
+						    <span class="text">fooddesk@gmail.com</span>
 					    </div>
 					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
 						    <span class="text">1hr or 30min on delivery time</span>
@@ -81,8 +81,9 @@
             
               <a href="{% url 'cart' %}" class="nav-link">
                 <span class="icon-shopping_cart"></span>
-                [{{ cart.count }}]
-              </a>
+                [{{ cart_count }}]
+              </a> 
+               
             </li>
           </ul>
 	    </div>
@@ -146,8 +147,8 @@
         <div class="row mb-5">
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Vegefoods</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
+              <h2 class="ftco-heading-2">Fooddesk</h2>
+              <p>Your Ultimate Food Destination</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                 <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
@@ -188,9 +189,9 @@
             	<h2 class="ftco-heading-2">Have a Questions?</h2>
             	<div class="block-23 mb-3">
 	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+	                <li><span class="icon icon-map-marker"></span><span class="text">676106 KOTAKKAL TIRUR, MALAPPURAM, KERALA, INDIA</span></li>
+	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+91 9746432088</span></a></li>
+	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">fooddesk@gmail.com</span></a></li>
 	              </ul>
 	            </div>
             </div>
@@ -200,7 +201,7 @@
           <div class="col-md-12 text-center">
 
             <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+						  Copyright &copy;<script>document.write(new Date().getFullYear());</script>
 						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 						</p>
           </div>
@@ -258,60 +259,18 @@
   window.addEventListener('scroll', handleScroll);
   // add to Cart js: 
 </script>
-
-{% comment %} $(document).ready(function() {
-  $(".addToCartBtn").click(function(event) {
-    event.preventDefault();
-
-    var product_id = $(this).closest('.product_data').find('.prod_id').val();
-    var variation_id = $(this).closest('.product_data').find('.var_id').val();
-    var product_qty = $(this).closest('.product_data').find('.qty-input').val(); ;
-    var token = $('input[name=csrfmiddlewaretoken]').val();
-    $.ajax({
-      url: '/cart/addtocart/',
-      method: 'POST',
-      data: {
-        'variation_id' : variation_id,
-        'product_id': product_id,
-        'product_qty': product_qty,
-        'csrfmiddlewaretoken': token
-      },
-      success: function(response) {
-        // Handle the successful response here
-        console.log(response);
-        alertify.success(response.status);
-      },
-    });
+<script>
+  // Wait for the document to be ready
+$(document).ready(function() {
+// Set a timeout to remove the error message after 5 seconds (5000 milliseconds)
+ setTimeout(function() {
+  $('#error-message').fadeOut('slow', function() {
+      $(this).remove();
   });
-});  {% endcomment %}
+}, 5000); // Adjust the duration as needed
+});
 
-    
-  {% comment %} //add to wishlist:
-
-  $(".addToWishlist").click(function(event) {
-  event.preventDefault();
-
-  var product_id = $(this).closest('.product_data').find('.prod_id').val();
-  var var_id = $(this).closest('.product_data').find('.var_id').val();
-  var token = $('input[name=csrfmiddlewaretoken]').val();
-  console.log(product_id,var_id)
-  $.ajax({
-    url: '/add_to_wishlist/',
-    method: 'POST',
-    data: {
-      'variation_id' : var_id
-      'product_id': product_id,
-      'csrfmiddlewaretoken': token
-    },
-    success: function(response) {
-      console.log(response)
-      alertify.success(response.status);
-
-      
-      
-    },
-  });
-}); {% endcomment %}
+</script>
 <script>
 $(".addToWishlist").click(function(event) {
   event.preventDefault();
@@ -333,6 +292,26 @@ $(".addToWishlist").click(function(event) {
     },
   });
 });
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    updateCartCount();
+
+    function updateCartCount() {
+      $.ajax({
+        url: "{% url 'cart' %}",
+        type: "GET",
+        success: function(response) {
+          $('#cart_count').text(response.cart_count);
+        }
+      });
+    }
+  });
+
 
 </script>
 

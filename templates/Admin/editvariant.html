@@ -6,7 +6,7 @@
     <h1>Edit Variation</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="{%url 'dashboard'%}">Home</a></li>
         <li class="breadcrumb-item active">Edit Variation</li>
       </ol>
     </nav>
@@ -26,13 +26,6 @@
     {%for variation in variation%}
         <form action="{% url 'edit_variation' variation.id %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
-{% comment %} 
-          <div class="form-group row mt-3">
-            <label for="product_variant" class="col-sm-2 col-form-label">Product Variant</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="product_variant" name="product_variant" value="{{ variation.product_variant.product_name }}" readonly>
-            </div>
-          </div> {% endcomment %}
           <div class="form-group row mt-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label"
                 >Product Variant</label
@@ -51,14 +44,7 @@
             </select>
             </div>
            </div>
-
-{% comment %} 
-          <div class="form-group row mt-3">
-            <label for="size" class="col-sm-2 col-form-label">Size</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="size" name="size" value="{{ variation.size.size }}" readonly>
-            </div>
-          </div> {% endcomment %}
+           
           <div class="form-group row mt-3">
             <label for="colFormLabel" class="col-sm-2 col-form-label"
             >Size</label

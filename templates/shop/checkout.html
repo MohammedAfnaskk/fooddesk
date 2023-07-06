@@ -1,146 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-
- 
-
-<style>
-  /*the complete project is in the following link:
-  https://github.com/vkive/coupon-code.git
-  Follow me on Codepen
-  */
-  *{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'poppins', sans-serif;
-      
-  }
-  .container1{
-      width: 75%;
-      height: 54vh;
-      background: #f0fff3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  
-  }
-  .coupon-card{
-      background: linear-gradient(135deg, #7158fe, #9d4de6);
-      color: #fff;
-      text-align: center;
-      padding: 40px 80px;
-      border-radius: 15px;
-      box-shadow: 0 10px 10px 0 rgba(0,0,0,0.15);
-      position: relative;
-  
-  }
-  .logo{
-      width: 80px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-  
-  }
-  .coupon-card h3{
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 35px;
-  
-  }
-  .coupon-card p{
-      font-size: 15px;
-  
-  }
-  .coupon-row{
-      display: flex;
-      align-items: center;
-      margin: 10px auto;
-      width: fit-content;
-  
-  }
-  #cpnCode{
-      border: 1px dashed #fff;
-      padding: 10px 20px;
-      border-right: 0;
-  
-  }
-  #cpnBtn{
-      border: 1px solid #fff;
-      background: #fff;
-      padding: 10px 20px;
-      color: #7158fe;
-      cursor: pointer;
-  }
-  .circle1, .circle2{
-      background: #f0fff3;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-  
-  }
-  .circle1{
-      left: -25px;
-  }
-  .circle2{
-      right: -25px;
-  }
-  
-  
-  .address-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .card-title {
-    margin-bottom: 1rem;
-  }
-
-  .address-details {
-    padding: 1rem;
-  }
-
-  .form-group {
-    margin-top: 20px;
-  }
-
-  .modal-body {
-    max-height: 300px; /* Adjust the value as needed */
-    overflow-y: auto;
-  }
-
-  .total-price {
-    display: flex;
-    align-items: center;
-  }
-
-  .total-price span {
-    margin-right: 10px;
-  }
-
-  .discount-line,
-  .total-line {
-    margin-bottom: 5px;
-  }
-
-  #discount,
-  #grand_total {
-    font-weight: bold;
-  }
-
-  .total-line span {
-    display: inline-block;
-  }
-
-  .grand_total {
-    display: none;
-  }
-</style>
-
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <div>
   <div class="container">
     {% if not cart %}
@@ -603,9 +463,10 @@
       $(".address-card").eq(selectedIndex).show();
     });
   });
+</script>
 
-  // #AJAX coupon
 
+ <script>
   $(function () {
     $("#coupon-form").submit(function (event) {
       event.preventDefault();
@@ -749,12 +610,6 @@
 
            }
         });
- 
-      
-
-
-
-
 
       
     });
@@ -774,7 +629,143 @@
       }, 3000);
   }
 </script>
- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ 
+ <style>
+  /*the complete project is in the following link:
+  https://github.com/vkive/coupon-code.git
+  Follow me on Codepen
+  */
+  *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'poppins', sans-serif;
+      
+  }
+  .container1{
+      width: 75%;
+      height: 54vh;
+      background: #f0fff3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+  }
+  .coupon-card{
+      background: linear-gradient(135deg, #7158fe, #9d4de6);
+      color: #fff;
+      text-align: center;
+      padding: 40px 80px;
+      border-radius: 15px;
+      box-shadow: 0 10px 10px 0 rgba(0,0,0,0.15);
+      position: relative;
+  
+  }
+  .logo{
+      width: 80px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+  
+  }
+  .coupon-card h3{
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 35px;
+  
+  }
+  .coupon-card p{
+      font-size: 15px;
+  
+  }
+  .coupon-row{
+      display: flex;
+      align-items: center;
+      margin: 10px auto;
+      width: fit-content;
+  
+  }
+  #cpnCode{
+      border: 1px dashed #fff;
+      padding: 10px 20px;
+      border-right: 0;
+  
+  }
+  #cpnBtn{
+      border: 1px solid #fff;
+      background: #fff;
+      padding: 10px 20px;
+      color: #7158fe;
+      cursor: pointer;
+  }
+  .circle1, .circle2{
+      background: #f0fff3;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+  
+  }
+  .circle1{
+      left: -25px;
+  }
+  .circle2{
+      right: -25px;
+  }
+  
+  
+  .address-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
 
+  .card-title {
+    margin-bottom: 1rem;
+  }
+
+  .address-details {
+    padding: 1rem;
+  }
+
+  .form-group {
+    margin-top: 20px;
+  }
+
+  .modal-body {
+    max-height: 300px; /* Adjust the value as needed */
+    overflow-y: auto;
+  }
+
+  .total-price {
+    display: flex;
+    align-items: center;
+  }
+
+  .total-price span {
+    margin-right: 10px;
+  }
+
+  .discount-line,
+  .total-line {
+    margin-bottom: 5px;
+  }
+
+  #discount,
+  #grand_total {
+    font-weight: bold;
+  }
+
+  .total-line span {
+    display: inline-block;
+  }
+
+  .grand_total {
+    display: none;
+  }
+</style>
  {% endblock %}

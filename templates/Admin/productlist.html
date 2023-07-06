@@ -9,7 +9,7 @@
     <h1>Product</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Product</a></li>
+        <li class="breadcrumb-item"><a href="{%url 'productlist'%}">Product</a></li>
         <li class="breadcrumb-item active">Product list</li>
       </ol>
     </nav>
@@ -41,8 +41,29 @@
                   <td>{{product.product_description}}</td>
                   <td>
                     <a href="{% url 'editproduct' product.id %}" class="btn btn-outline-primary btn-sm">Edit</a>
-                    <a href="{% url 'deleteproduct' product.id %}" type="submit" class="btn btn-danger btn-sm mt-2">Delete</a>
+                    <a href="{% url 'deleteproduct' product.id %}" type="submit" class="btn btn-danger btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}">Delete</a>
                   </td>
+                    <!-- Modal  for delete the product -->
+                    <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                            <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            Delete Product {{product.product_name }}
+                          </div>
+                          <div class="modal-footer">
+                            <form action="{%url 'deleteproduct' product.id%}" >
+                                
+                              <button type="submit" class="btn btn-danger">Confirm</button>
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                 </tr>
                 {% endfor %}
             

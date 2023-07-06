@@ -10,21 +10,31 @@ from django.contrib.auth.decorators import login_required
 from address.models import Address
 from cart.models import Cart 
 from django.contrib.auth import authenticate
+from order.models import Wallet
+from django.core.exceptions import ValidationError
 
 
 # Create your views here.
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='login')
 def userprofile(request):
-    user = User.objects.get(username=request.user)
-    addresses = Address.objects.filter(customer=request.user)
-    cart = Cart.objects.filter(user=request.user)
-    userdetails = {
+  user = User.objects.get(username=request.user)
+  addresses = Address.objects.filter(customer=request.user)
+  cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+  cart_count = cart.count() if cart else 0  
+  wallet = Wallet.objects.filter(user=request.user).last()
+ 
+
+  userdetails = {
         'cart': cart,
         'user': user,
-        'addresses': addresses
+        'addresses': addresses,
+        'wallet': wallet,
+        'cart_count': cart_count,
+
     }
 
-    if request.method == 'POST':
+  if request.method == 'POST':
         image = request.FILES.get('image')
         firstname = request.POST.get('first_name')
         lastname = request.POST.get('last_name')
@@ -44,7 +54,7 @@ def userprofile(request):
         user.save()
         return redirect('userprofile')
 
-    return render(request, "profile/profile.html", userdetails)
+  return render(request, "profile/profile.html", userdetails)
   
 def add_address(request):
   
@@ -101,21 +111,33 @@ def change_password(request):
     current_password = request.POST.get('password')
     change_psw = request.POST.get('newpassword')
     comfirm_psw = request.POST.get('renewpassword')
-    
+    password_validate = ValidatePassword(change_psw)
+        
     user = authenticate(username=request.user, password=current_password)
     if change_psw !=comfirm_psw:
       messages.error(request,"password dosen't Match")
       return redirect('change_password')
     
+    if  change_psw == comfirm_psw :
+        if password_validate is False:  
+            messages.info(request,'Enter Strong Password')
+            return redirect('change_password')
+
     if user is not None:
       user.set_password(change_psw)
       user.save()
       messages.error(request,"password change succesfully")
-
-      
-      
+ 
   return redirect('userprofile')
 
+
+def ValidatePassword(password):
+    from django.contrib.auth.password_validation import validate_password
+    try:
+        validate_password(password)
+        return True
+    except ValidationError:
+        return False
 
 
 def add_address_checkout(request):

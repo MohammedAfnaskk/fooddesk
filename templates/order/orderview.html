@@ -7,7 +7,7 @@
         <h1>Order view</h1>
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="{%url 'home'%}">Home</a></li>
             <li class="breadcrumb-item active">Orders</li>
           </ol>
         </nav>
@@ -56,7 +56,9 @@
                   <th class="table-header">Quantity</th>
                   <th class="table-header">Total</th>
                   <th class="table-header">Status</th>
+                  <th class="table-header">Action</th>
                   <th class="table-header">Track</th>
+
                 </tr>
               </thead>
               <tbody>
@@ -74,6 +76,19 @@
                   <td>{{ order.total_price }}</td>
                   <td>{{ item.status }}</td>
                   <td>
+                    {%if item.status == 'Delivered' %}
+                      <form method="POST" action="{% url 'order_return' order.id %}">
+                      {% csrf_token %}
+                      <button type="button" class="tracking-button btn-sm" data-toggle="modal" data-target="#returnModal">Return Order</button>
+                    </form>
+                   {%else%}
+                  <form method="post" action="{% url 'ordercancel' order.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="tracking-button btn-sm">Cancel Order</button>
+                  </form>
+                  {%endif%}
+                </td>
+                  <td>
                     <a href="#" class="tracking-button btn-sm">Track</a>
                   </td>
                 </tr>
@@ -83,6 +98,36 @@
           </div>
         </div>
       </div>
+
+      <!-- The modal order return -->
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="returnModalLabel">Return Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Add your form fields for return issue and image upload here -->
+        <form method="POST" action="{% url 'order_return' order.id %}">
+          {% csrf_token %}
+          <!-- Add your form fields here -->
+          <div class="form-group">
+            <label for="comment">Return Issue</label>
+            <textarea class="form-control" id="comment" name=" comment" rows="4" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="image">Upload Image</label>
+            <input type="file" class="form-control-file" id="image" name="image" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Return</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
       
 </main>
 <style>
@@ -165,6 +210,5 @@
 
       
     </style>
-    
-
+ 
 {% endblock %}

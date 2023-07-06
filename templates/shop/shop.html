@@ -38,26 +38,6 @@
         </ul>
       </div>
     </div>
-     
-      {% comment %} <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
-          <div class="card-body">
-              <div class="shop__sidebar__price">
-                  <form method="GET" action="{% url 'shop'  %}">
-                      <select name="price_filter" onchange="this.form.submit()">
-                          <option value="">Sort by Price</option>
-                          <option value="low_to_high" {% if price_filter == 'low_to_high' %}selected{% endif %}>Low to High</option>
-                          <option value="high_to_low" {% if price_filter == 'high_to_low' %}selected{% endif %}>High to Low</option>
-                      </select>
-                                    
-                    <select name="sort" onchange="this.form.submit()">
-                      <option value="">Sort by Name</option>
-                      <option value="atoz" {% if sort == 'atoz' %}selected{% endif %}>A to Z</option>
-                      <option value="ztoa" {% if sort == 'ztoa' %}selected{% endif %}>Z to A</option>
-                    </select>
-                  </form>
-              </div>
-          </div>
-      </div> {% endcomment %}
       <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
         <div class="card-body">
           <div class="shop__sidebar__price">

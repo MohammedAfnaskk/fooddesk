@@ -4,7 +4,14 @@
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
- 
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"
+/>
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"
+/>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,7 +38,7 @@
         <div class="carousel-caption">
           <h1 class="mb-2">Tell me what you eat</h1>        
           <h2 class="subheading mb-4">We deliver food items only</h2>
-          <p><a href="#" class="btn btn-primary">View Details</a></p>
+          <p><a href="{%url 'shop'%}" class="btn btn-primary">View Details</a></p>
         </div>
       </div>
     </div>
@@ -58,8 +65,8 @@
             		<span class="flaticon-shipped"></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">Free Shipping</h3>
-                <span>On order over $100</span>
+                <h3 class="heading">Free Delivery</h3>
+                <span>On order over ₹500</span>
               </div>
             </div>      
           </div>
@@ -115,7 +122,7 @@
 									<div class="text text-center">
 										<h2>Broasted chicken</h2>
 										<p>Protect the health of every home</p>
-										<p><a href="#" class="btn btn-primary">Shop now</a></p>
+										<p><a href="{%url 'shop'%}" class="btn btn-primary">Shop now</a></p>
 									</div>
 								</div>
 							</div>
@@ -123,13 +130,13 @@
 								<div class="category-wrap 
                  img mb-4 d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/bu_1.jpg)'%}">
 									<div class="text px-3 py-1">
-										<h2 class="mb-0"><a href="#">Burger</a></h2>
+                    <h2 class="mb-0"><a href="{% url 'shop' %}" style="text-decoration: none;">Burger</a></h2>
 									</div>
 								</div>
 								<div class="category-wrap 
                  img d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/piz_1.jpg)'%}">
 									<div class="text px-3 py-1">
-										<h2 class="mb-0"><a href="#">Pizza</a></h2>
+										<h2 class="mb-0"><a href="#"style="text-decoration: none;">Pizza</a></h2>
 									</div>
 								</div>
 							</div>
@@ -140,13 +147,13 @@
 						<div class="category-wrap 
              img mb-4 d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/ju_1.jpg)'%}">
 							<div class="text px-3 py-1">
-								<h2 class="mb-0"><a href="#">Juices & drinks</a></h2>
+								<h2 class="mb-0"><a href="#"style="text-decoration: none;">Juices & drinks</a></h2>
 							</div>		
 						</div>
 						<div class="category-wrap 
              img d-flex align-items-end" style="background-image: url({%static 'foodiecss/images/bros_1.jpg)'%}">
 							<div class="text px-3 py-1">
-								<h2 class="mb-0"><a href="#">Broasted </a></h2>
+								<h2 class="mb-0"><a href="#"style="text-decoration: none;">Broasted </a></h2>
 							</div>
 						</div>
 					</div>
@@ -167,41 +174,65 @@
     	</div>
     	<div class="container">
 			
-    		<div class="row">
-				{% for i in prod %}
-    			<div class="col-md-6 col-lg-3 
-          ">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="{{i.image_variant.url}}"  alt="Colorlib Template">
-     						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3 text-center">
-    						<h3><a href="#">{{i.product_variant}}</a></h3>
-    						<div class="d-flex">
-    							<div class="pricing">
-		    						<p class="price"><span class="mr-2 price-dc"></span><span class="price-sale">₹
-										{{i.price_variant}}</span></p>
-		    					</div>
-	    					</div>
-	    					<div class="bottom-area d-flex px-3">
-	    						<div class="m-auto d-flex">
-	    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-	    								<span><i class="ion-ios-menu"></i></span>
-	    							</a>
-	    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-	    								<span><i class="ion-ios-cart"></i></span>
-	    							</a>
-	    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
-	    								<span><i class="ion-ios-heart"></i></span>
-	    							</a>
-    							</div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-				
-				{% endfor %}
-			</div>
+
+        {% if prod %}
+        <div class="row ">
+          {% for i in prod %}
+          <div class="col-md-6 col-lg-3 product_data">
+            <div class="product">
+              <a href="{%url 'singleproduct' i.id%}" class="img-prod"
+                ><img
+                  class="img-fluid"
+                  src="{{i.image_variant.url}}"
+                  alt="Colorlib Template"
+                />
+              </a>
+              <div class="text py-3 pb-4 px-3 text-center">
+                <h3><a>{{i.product_variant.product_name}}</a></h3>
+                <div class="d-flex">
+                  <div class="pricing">
+                    <p>
+                      <span class="mr-2 price-dc"></span
+                      ><span class="price-sale">
+                    {% if i.offer %}
+                        <del class="text-danger">₹ {{i.price_variant}}</del>&nbsp;
+                        ₹{{i.get_offer}}
+              {% else %}
+               ₹{{i.price_variant}}
+            {% endif %}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                {% csrf_token %}
+                <input
+                  type="hidden"
+                  value="{{i.product_variant.id}}"
+                  class="prod_id"
+                />
+                <input type="hidden" value="{{i.id}}" class="var_id" />
+                <div class="bottom-area d-flex px-3">
+                  <div class="m-auto d-flex">
+                    <a
+                      class="buy-now d-flex justify-content-center align-items-center mx-3"
+                    >
+                      <span><i class="ion-ios-cart addToCartBtn"></i></span>
+                    </a>
+                    <a
+                      class="heart d-flex justify-content-center align-items-center"
+                    >
+                      <span><i class="ion-ios-heart addToWishlist"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <h2>No products found</h2>
+        {% endif %}
 
     		</div>
 			
@@ -301,8 +332,11 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-     
+
+ 
+  
     <style>
+     
     .carousel-item {
       position: relative;
     }
@@ -345,6 +379,7 @@
       border-color: #0062cc;
     }
   </style>
+  
     <script>
       $(document).ready(function() {
         $('.home-slider').owlCarousel({
@@ -358,5 +393,35 @@
         });
       });
     </script>
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $(".addToCartBtn").click(function (event) {
+      event.preventDefault();
+
+      var product_id = $(this).closest(".product_data").find(".prod_id").val();
+      var variation_id = $(this).closest(".product_data").find(".var_id").val();
+      var product_qty = 1;
+      var token = $("input[name=csrfmiddlewaretoken]").val();
+      $.ajax({
+        url: "/cart/addtocart/",
+        method: "POST",
+        data: {
+          variation_id: variation_id,
+          product_id: product_id,
+          product_qty: product_qty,
+          csrfmiddlewaretoken: token,
+        },
+        success: function (response) {
+          // Handle the successful response here
+          console.log(response);
+          alertify.success(response.status);
+        },
+      });
+    });
+  });
+</script>
+
 {% endblock content %}
