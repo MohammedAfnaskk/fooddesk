@@ -86,8 +86,7 @@ def single_product(request, var_id):
             return JsonResponse({'variation_id':variation.id, 'variation_quantity':variation_quantity})
     
     variation_list = Variation.objects.filter(product_variant=variation.product_variant.id)
-    context = {
-        'cart': cart,   
+    context = {  
         'sizes': Size.objects.all(),
         'variations':variation,
         'variation_list': variation_list,
