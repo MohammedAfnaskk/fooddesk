@@ -147,8 +147,10 @@ def delete_wishlist_item(request):
       
 # def razorpaycheck(request):
 def search(request):
-    cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
-    cart_count = cart.count() if cart else 0  
+    cart_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user)  # Modify this query based on your cart model and user relationship
+        cart_count = cart.count() if cart else 0  
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:
