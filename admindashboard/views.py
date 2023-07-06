@@ -109,29 +109,18 @@ def addproduct(request):
         category_id = request.POST.get('category')
         category = Category.objects.get(id=category_id)
         description=request.POST['product_description']
-        image= request.FILES.get('image')
-        qty=request.POST['quantity']
-        price = request.POST['product_price']
+      
         
         # Validaiton
         if Product.objects.filter(product_name=name).exists():
             messages.error(request,'Product name already exists')
             return redirect('addproduct')
-            
-        if name == "or price ==":
-            messages.error(request,'Name or Price field are empty')
-            return redirect('product')
-        if not image:
-            messages.error(request,'Image not uploaded')
-            return redirect('productlist')
+     
         
         #Save
         product =Product(product_name =name,
-                        quantity =qty,
-                        product_price = price,
-                        product_description = description,
-                        image = image,
-                        category= category)
+                         product_description = description,
+                         category= category)
         product.save()
         return redirect('productlist')
     context = {
@@ -153,29 +142,17 @@ def editproduct(request, prod_id):
         category_id = request.POST.get('category')
         category = Category.objects.get(id=category_id)        
         description = request.POST['product_description']
-        image = request.FILES.get('image')
-        qty = request.POST['quantity']
-        price = request.POST['product_price']
+        
 
         # # Validation
         if Product.objects.filter(product_name=name).exclude(id=prod_id).exists():
             messages.error(request, 'Product name already exists')
             return redirect('editproduct', prod_id=prod_id)
 
-        if not name or not price:
-            messages.error(request, 'Name or Price field is empty')
-            return redirect('editproduct', prod_id=prod_id)
-
-        if not image:
-            messages.error(request, 'Image not uploaded')
-            return redirect('editproduct', prod_id=prod_id)
-
+      
         # Save
         prd.product_name = name
-        prd.quantity = qty
-        prd.product_price = price
         prd.product_description = description
-        prd.image = image
         prd.category = category
         prd.save()
         return redirect('productlist')
