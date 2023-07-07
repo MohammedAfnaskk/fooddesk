@@ -147,10 +147,32 @@
                                 </button>
                                 
                                 <td>
-                                  <a href="{% url 'deleteAddress' address.id %}" type="submit" class="btn btn-danger ml-3 btn-sm">Delete</a>
+                                  <a href="{% url 'deleteAddress' address.id %}" type="submit" class="btn btn-danger ml-3 btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}">Delete</a>
                                </td>
                               </div>
                             </div> 
+
+                                                      <!-- Modal  for delete the product -->
+                          <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                                  <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  Delete Address : {{address.fullname}}{{address.mobile}}{{ address.house }} {{ address.city }} {{ address.state }} {{ address.country }} {{ address.zip }}
+                                </div>
+                                <div class="modal-footer">
+                                  <form action="{%url 'deleteAddress' address.id%}">
+                                      
+                                    <button type="submit" class="btn btn-danger ml-3 btn-sm">Confirm</button>
+                                  </form>
+                                  <button type="button" class="btn btn-secondary ml-3 btn-sm" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           {% endfor %}
                           
 

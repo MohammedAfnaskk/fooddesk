@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> Coupon Code Web Design</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
 <div>
   <div class="container">
     {% if not cart %}
@@ -130,13 +138,14 @@
                         <div class="form-group">
                           <div class="custom-control custom-radio">
                             <input
-                              type="radio"
-                              id="createAddressRadio"
-                              name="optradio"
-                              class="custom-control-input"
-                              data-toggle="modal"
-                              data-target="#myModal"
-                            />
+                            type="radio"
+                            name="optradio"
+                            class="custom-control-input"
+                            data-toggle="modal"
+                            data-target="#myModal{{ forloop.counter }}"
+                            id="createAddressRadio"
+
+                            >
                             <label
                               class="custom-control-label"
                               for="createAddressRadio"
@@ -152,15 +161,7 @@
             </form>
             <!-- END -->
             <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title> Coupon Code Web Design</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
+   
         <div class="container1">
             <div class="coupon-card">
                 <img src="https://www.brandbucket.com/sites/default/files/logo_uploads/302425/stamped_preview_w7.png" class="logo">
@@ -174,9 +175,7 @@
                 <div class="circle2"></div>
             </div>
         </div>
-    </body>
-</html>
-          </div>
+        </div>
 
         <div class="col-lg-5 cart-wrap">
           <h4>Coupon Code</h4>
@@ -343,12 +342,12 @@
             </div>
           </div>
         </div>
-      </div> 
+      </div>    
       
       {%endfor%}
 
       <!-- add address checkoutpage the modal HTML code -->
-      <div class="modal" tabindex="-1" id="myModal{{forloop.counter}}">
+      <div class="modal" tabindex="-1" id="myModal{{ forloop.counter }}">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">

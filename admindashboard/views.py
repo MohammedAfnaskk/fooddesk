@@ -149,7 +149,6 @@ def editproduct(request, prod_id):
             messages.error(request, 'Product name already exists')
             return redirect('editproduct', prod_id=prod_id)
 
-      
         # Save
         prd.product_name = name
         prd.product_description = description

@@ -102,17 +102,17 @@
       event.preventDefault();
   
       var product_id = $(this).closest(".product_data").find(".prod_id").val();
- 	  var variation_id= $(this).closest('.product_data').find('.var_id').val();
+ 	  var variation_id= $(this).closest('.product_data').find(".var_id").val();
 	  var product_qty = 1;
       var token = $('input[name=csrfmiddlewaretoken]').val();
       $.ajax({
         url: '/cart/addtocart/',
         method: 'POST',
         data: {
-          'variation_id':variation_id,
-          'product_id': product_id,
-          'product_qty': product_qty,
-          'csrfmiddlewaretoken': token
+			variation_id:variation_id,
+			product_id: product_id,
+			product_qty: product_qty,
+			csrfmiddlewaretoken: token
         },
         success: function(response) {
           // Handle the successful response here
