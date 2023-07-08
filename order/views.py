@@ -45,9 +45,9 @@ def vieworder(request, t_no):
         return redirect("order_details")
    
   
-def ordercancel(request, order_id):
+def ordercancel(request, order_id, item_id):
     try:
-       order_item = OrderItem.objects.filter(order__id=order_id)
+       order_item = OrderItem.objects.filter(id = item_id, order__id=order_id)
     except OrderItem.DoesNotExist:
         messages.error(request, 'orderitem_not_found')
         return redirect('order_details')
@@ -57,8 +57,8 @@ def ordercancel(request, order_id):
         
         
         if order_item.order.payment_mode == 'Razorpay':
-            order = Order.objects.get(id=order_id)
-            total_price = order.total_price
+            total_price = order_item.price
+
 
             try:
                 wallet = Wallet.objects.get(user=request.user)

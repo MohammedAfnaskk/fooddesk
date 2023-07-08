@@ -5,11 +5,17 @@
     <title>Fooddesk</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
+
+ 
 
     <link rel="stylesheet" href="{% static 'foodiecss/css/open-iconic-bootstrap.min.css'%}">
     <link rel="stylesheet" href="{% static 'foodiecss/css/animate.css'%}">
@@ -31,7 +37,12 @@
     <link rel="stylesheet" href="{%static 'foodiecss/css/style.css' %}">
       <!-- Other meta tags and stylesheets -->
     <link rel="stylesheet" href="{%static 'foodiecss/css/font-awesome/css/all.min.css'%}">
-    
+       <!-- Custom CSS to set text color to white -->
+       <style>
+        .ajs-message.ajs-success {
+          color: white;
+        }
+      </style>
     
   </head>
   
@@ -112,7 +123,7 @@
 	    </div>
 	  </nav>
     <!-- END nav -->
-    {% block content %}
+    {% block content1 %}
 
     {% endblock %}
     <section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
@@ -231,6 +242,7 @@
    <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
 
 
+
   <script>
         // Function to check if an element is in the viewport
   function isInViewport(element) {
@@ -310,8 +322,34 @@ $(".addToWishlist").click(function(event) {
     }
   });
 
-
 </script>
+<script>
+    $(document).ready(function () {
+      $(".addToCartBtn").click(function (event) {
+        event.preventDefault();
+  
+        var product_id = $(this).closest(".product_data").find(".prod_id").val();
+        var variation_id = $(this).closest(".product_data").find(".var_id").val();
+        var product_qty = 1;
+        var token = $("input[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+          url: "/cart/addtocart/",
+          method: "POST",
+          data: {
+            variation_id: variation_id,
+            product_id: product_id,
+            product_qty: product_qty,
+            csrfmiddlewaretoken: token,
+          },
+          success: function (response) {
+            // Handle the successful response here
+            console.log(response);
+            alertify.success(response.status);
+          },
+        });
+      });
+    });
+  </script>
 
   <script src="{%static 'foodiecss/js/main.js'%}"></script>
  
@@ -362,7 +400,6 @@ $(".addToWishlist").click(function(event) {
       visibility: visible;
       transition-delay: 0s;
     }
-    
   </style>    
  
   

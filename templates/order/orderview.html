@@ -82,7 +82,7 @@
                       <button type="button" class="tracking-button btn-sm" data-toggle="modal" data-target="#returnModal">Return Order</button>
                     </form>
                    {%else%}
-                  <form method="post" action="{% url 'ordercancel' order.id %}">
+                  <form method="post" action="{% url 'ordercancel' order_id=order.id item_id=item.id %}">
                   {% csrf_token %}
                   <button type="submit" class="tracking-button btn-sm">Cancel Order</button>
                   </form>

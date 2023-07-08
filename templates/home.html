@@ -1,8 +1,9 @@
 
-{%extends 'base.html'%}
+{%extends 'homebase.html'%}
 {% load static %}
-{% block content %}
-<style>
+{% block content1 %}
+
+ <style>
   .carousel-caption h1,
   .carousel-caption h2,
   .carousel-caption p {
@@ -15,10 +16,49 @@
     transform: translateX(-50%);
   }
   
+  .carousel-item {
+    position: relative;
+  }
   
+  .carousel-caption {
+    position: absolute;
+    top: 54%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #fff;
+  }
+  
+  .carousel-caption h1 {
+    font-size: 60px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .carousel-caption h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .carousel-caption p {
+    margin-bottom: 0;
+  }
+  
+  .carousel-item img {
+    max-height: 620px;
+    object-fit: cover;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
 </style>
  
-  
   <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
@@ -236,7 +276,6 @@
         {% endif %}
 
     		</div>
-			
     	</div>
     </section>
  
@@ -330,57 +369,15 @@
         </div>
       </div>
     </section>
+
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
- 
-  
-    <style>
-     
-    .carousel-item {
-      position: relative;
-    }
-    
-    .carousel-caption {
-      position: absolute;
-      top: 54%;
-      transform: translateY(-50%);
-      text-align: center;
-      color: #fff;
-    }
-    
-    .carousel-caption h1 {
-      font-size: 60px;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-    
-    .carousel-caption h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    
-    .carousel-caption p {
-      margin-bottom: 0;
-    }
-    
-    .carousel-item img {
-      max-height: 620px;
-      object-fit: cover;
-    }
-    
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-    }
-    
-    .btn-primary:hover {
-      background-color: #0069d9;
-      border-color: #0062cc;
-    }
-  </style>
-  
+<!-- Include Alertify.js JS -->
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+
+
     <script>
       $(document).ready(function() {
         $('.home-slider').owlCarousel({
@@ -394,35 +391,7 @@
         });
       });
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+ 
 
-<script>
-  $(document).ready(function () {
-    $(".addToCartBtn").click(function (event) {
-      event.preventDefault();
 
-      var product_id = $(this).closest(".product_data").find(".prod_id").val();
-      var variation_id = $(this).closest(".product_data").find(".var_id").val();
-      var product_qty = 1;
-      var token = $("input[name=csrfmiddlewaretoken]").val();
-      $.ajax({
-        url: "/cart/addtocart/",
-        method: "POST",
-        data: {
-          variation_id: variation_id,
-          product_id: product_id,
-          product_qty: product_qty,
-          csrfmiddlewaretoken: token,
-        },
-        success: function (response) {
-          // Handle the successful response here
-          console.log(response);
-          alertify.success(response.status);
-        },
-      });
-    });
-  });
-</script>
-
-{% endblock content %}
+{% endblock %}
