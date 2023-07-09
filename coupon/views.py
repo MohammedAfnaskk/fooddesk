@@ -15,7 +15,7 @@ def apply_coupon(request):
         grand_total = 0 
         subtotal = 0
         for item in cart_items:
-            if item.variation is None:
+            if item.variation.offer is None:
                 subtotal += item.product_qty * item.variation.price_variant
                 tax = subtotal * 0.05  # Assuming tax is 5% of the subtotal
                 grand_total = subtotal + tax
