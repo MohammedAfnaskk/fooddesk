@@ -368,7 +368,18 @@
 
   <!-- Template Main JS File -->
   <script src="{%static 'admincss/assets/js/main.js'%}"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    // Set a timeout to remove the error message after 5 seconds (5000 milliseconds)
+     setTimeout(function() {
+      $('#error-message').fadeOut('slow', function() {
+          $(this).remove();
+      });
+    }, 5000); // Adjust the duration as needed
+    });
+    
+    </script>
 </body>
 
 </html>

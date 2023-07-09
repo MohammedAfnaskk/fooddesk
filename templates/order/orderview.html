@@ -12,7 +12,14 @@
           </ol>
         </nav>
       </div>
-      
+      {% if messages %}
+      {% for message in messages %}
+
+      <div id="error-message"  class="text-center text-danger pt-3"></button>
+          <strong>{{message}}</strong>
+      </div>
+      {% endfor %}
+      {%endif%}
     <div class="container pb-4">
         <div class="d-flex ">
             <!-- <div class="col-md-6"> -->
@@ -28,8 +35,7 @@
                 </div>
                 </div>
             </div>
-            <!-- </div> -->
-            <!-- <div class="col-md-6 pl-1"> -->
+           
             <div class="card mt-3 mb-2">
                 <div class="card-body">
                 <h5 class="card-title">ORDER INFO</h5>
@@ -40,8 +46,7 @@
                 </div>
                 </div>
             </div>
-            <!-- </div> -->
-        </div>
+         </div>
     </div> 
     
       <div class="card n w-75 mx-auto ">
