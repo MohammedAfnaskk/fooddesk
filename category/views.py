@@ -18,6 +18,7 @@ from django.contrib import messages
 
 # Create your views here.
 
+# Home Page
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def home(request):
     cart_count = 0
@@ -30,9 +31,7 @@ def home(request):
     }
     return render(request,"home.html", dict_list)
 
-
- 
-
+# Shoping Page
 def shop(request, category_slug=None):
     categories = None
     filter = request.GET.get('filter')
@@ -68,7 +67,7 @@ def shop(request, category_slug=None):
 
     return render(request, "shop/shop.html", dict_list)
 
-
+# Product Show Page
 def single_product(request, var_id):
     try:
         variation = Variation.objects.get(id=var_id)
@@ -96,7 +95,7 @@ def single_product(request, var_id):
 
     return render(request, "shop/buyshop.html", context)
 
- 
+# Wishlist
 @login_required(login_url='login') 
 def wishlist(request):
   wishlist = Wishlist.objects.filter(user = request.user)
@@ -112,6 +111,7 @@ def wishlist(request):
   }
   return render(request,"shop/wishlist.html", context)
 
+# Add Wishlist
 def add_to_wishlist(request):
   if request.method== 'POST':
     if request.user.is_authenticated:
@@ -131,7 +131,7 @@ def add_to_wishlist(request):
         return JsonResponse({'status': "Login to Continue"})
   return redirect('/')
 
-
+# Delete Wishlist Product
 def delete_wishlist_item(request):
     if request.user.is_authenticated:
       itemId  = int(request.POST.get('itemId'))
@@ -145,7 +145,7 @@ def delete_wishlist_item(request):
     else:
         return JsonResponse({'status': "Login to Continue"})
       
-# def razorpaycheck(request):
+# Search Product  
 def search(request):
     cart_count = 0
     if request.user.is_authenticated:
@@ -163,8 +163,10 @@ def search(request):
 
             }
             return render(request, "shop/shop.html", context)
-          
-
+        
+# 404 Page           
+def page_not_found(request):
+    return render(request, "error.html")
  
 
   

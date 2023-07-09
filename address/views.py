@@ -15,6 +15,8 @@ from django.core.exceptions import ValidationError
 
 
 # Create your views here.
+
+# User Profile
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='login')
 def userprofile(request):
@@ -55,7 +57,8 @@ def userprofile(request):
         return redirect('userprofile')
 
   return render(request, "profile/profile.html", userdetails)
-  
+
+# Add address 
 def add_address(request):
   
   user =  request.user
@@ -71,6 +74,7 @@ def add_address(request):
   address.save()
   return redirect('userprofile')
 
+#Update address
 def update_address(request,adrs_id):
   address = Address.objects.get(id = adrs_id)
 
@@ -99,13 +103,14 @@ def update_address(request,adrs_id):
     address.save()
     return redirect('userprofile')
   
+# Delete address 
 def delete_address(request, address_id):
     address = Address.objects.get(id=address_id)
     address.delete()
     messages.success(request, 'Address deleted successfully.')
     return redirect('userprofile')  
 
-
+# Change Password
 def change_password(request):
   if request.method == 'POST':
     current_password = request.POST.get('password')
@@ -130,7 +135,7 @@ def change_password(request):
  
   return redirect('userprofile')
 
-
+# Validate Password
 def ValidatePassword(password):
     from django.contrib.auth.password_validation import validate_password
     try:
@@ -139,7 +144,7 @@ def ValidatePassword(password):
     except ValidationError:
         return False
 
-
+# Add Address Checkout Page
 def add_address_checkout(request):
   user =  request.user
   new_name =request.POST.get('fullname')
@@ -153,7 +158,8 @@ def add_address_checkout(request):
   address = Address(customer = user, fullname = new_name,mobile = new_mobile,house = new_house,city = new_city, state = new_state,zip = new_zip,country = new_country)
   address.save()
   return redirect('checkout')
- 
+
+# Update Address Checkout
 def update_address_checkout(request,adrs_id):
   address = Address.objects.get(id = adrs_id)
 
@@ -182,36 +188,7 @@ def update_address_checkout(request,adrs_id):
     address.save()
     return redirect('checkout')
   
-  
-
-def update_address_checkout(request,adrs_id):
-  address = Address.objects.get(id = adrs_id)
-
-  if request.method == 'POST':
-    new_name =request.POST.get('fullname')
-    new_mobile =request.POST.get('mobile')
-    new_house = request.POST.get('house1')
-    new_city = request.POST.get('city1')
-    new_state = request.POST.get('state1')
-    new_zip = request.POST.get('zip1')
-    new_country = request.POST.get('country1')
-    if new_name:
-      address.fullname = new_name
-    if new_mobile:
-      address.mobile = new_mobile
-    if new_house:
-      address.house=  new_house
-    if new_city:
-      address.city = new_city
-    if new_state:
-      address.state = new_state
-    if new_zip:
-      address.zip = new_zip
-    if new_country:
-      address.country = new_country
-    address.save()
-    return redirect('checkout')
-  
+# Delete Address Checkout Page
 def delete_address_checkout(request, address_id):
     address = Address.objects.get(id=address_id)
     address.delete()

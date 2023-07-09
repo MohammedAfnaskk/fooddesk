@@ -9,6 +9,7 @@ from .models import*
 from django.http import HttpResponse
 
 # Create your views here.
+# User Order Details Page 
 @login_required(login_url='login')
 def order_details(request):
     orders =Order.objects.filter(user=request.user).order_by('-id')
@@ -23,6 +24,7 @@ def order_details(request):
     
     return render(request,"order/order.html",context)
 
+# User Order View Page
 def vieworder(request, t_no):
     user = request.user
     order = Order.objects.filter(tracking_no=t_no, user=user).first()
@@ -44,7 +46,7 @@ def vieworder(request, t_no):
     else:
         return redirect("order_details")
    
-  
+# User Order Cancel  
 def ordercancel(request, order_id, item_id):
     try:
        order_item = OrderItem.objects.filter(id = item_id, order__id=order_id)
@@ -54,12 +56,10 @@ def ordercancel(request, order_id, item_id):
     for order_item in order_item:
         qty = order_item.quantity
         pid = order_item.variation.id
-        
-        
+         
         if order_item.order.payment_mode == 'Razorpay':
             total_price = order_item.price
-
-
+            
             try:
                 wallet = Wallet.objects.get(user=request.user)
                 wallet.wallet += total_price
@@ -80,6 +80,7 @@ def ordercancel(request, order_id, item_id):
     variation.save()
     return redirect('orderview', t_no=order_item.order.tracking_no)
 
+# User Order Return
 def order_return(request, order_id):
     try:
         order_return = Order.objects.get(id=order_id)

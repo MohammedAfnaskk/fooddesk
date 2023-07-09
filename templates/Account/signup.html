@@ -33,8 +33,6 @@
 	  <div class="row align-items-center justify-content-center">
 		<div class="col-md-7 mt-5">
 		  <h3>Signup to <strong>Foodie</strong></h3>
- 		  <form action="#" method="POST">
-			{% csrf_token %}
 			{% if messages %}
 
 			{% for message in messages %}
@@ -52,23 +50,26 @@
 				<div class="col-md-12 form-group p_star">
 					<input type="number" class="form-control" id="name" name="otp" value="" placeholder="Enter Your OTP..!">
 				</div>
+				<input type="hidden" value="{{usr.email}}" name="email">
 				<div class="col-md-12 form-group">
 					<button type="submit" value="submit" class="btn  btn-block btn-primary">Submit</button>  
 				</div>
 			</form>
 		   {% else %}
+		   <form action="{%url 'signup'%}" method="POST">
+			{% csrf_token %}
 			<div class="form-group mt-3">
 			  <label for="username">Your Name</label>
-			  <input type="text" id="first_name" class="form-control " style =" height: 40px;" placeholder="Your Name" required  name='first_name'>
+			  <input type="text" id="first_name" class="form-control " style =" height: 40px;" placeholder="Your Name" required   name="firstname" value="{{pre_firstname}}">
 			</div>
 			<div class="form-group ">
 			  <label for="password">Username</label>
-			  <input type="text"  id="username" class="form-control " style =" height: 40px;" placeholder="Username" required name='username'>
+			  <input type="text"  id="username" class="form-control " style =" height: 40px;" placeholder="Username" required  name="name" value="{{pre_name}}">
 			</div>
 
 		    <div class="form-group last">
 			<label for="password">Email</label>
-			<input type="text" id="emailid" class="form-control" style =" height: 40px;" placeholder="Email Address" required pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}"name='emailid'>
+			<input type="text" id="emailid" class="form-control" style =" height: 40px;" placeholder="Email Address" required pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}"name='email' value="{{pre_email}}">
 		    </div>
 
 			 
@@ -76,13 +77,13 @@
 			
 		    <div class="form-group last">
 			<label for="password">Password</label>
-			<input type="text" id="password" class="form-control" style =" height: 40px;" placeholder="Password" required name='password'>
+			<input type="text" id="password" class="form-control" style =" height: 40px;" placeholder="Password" required name="password1">
 		    </div>
            
 			
 		    <div class="form-group last">
 			<label for="password">Comfirm Password</label>
-			<input type="text"  id="comfirmpassword" class="form-control" style =" height: 40px;" placeholder="Comfirm Password" required name='comfirmpassword'>
+			<input type="text"  id="comfirmpassword" class="form-control" style =" height: 40px;" placeholder="Comfirm Password" required name="password2">
 		   </div>
 
  			<input type="submit" name="register" class="btn btn-block btn-primary" value="SIGN UP">
@@ -116,5 +117,19 @@
   });
   
   </script>
+  <script>
+    function validateForm() {
+        var firstname = document.forms[0]["firstname"].value;
+        var name = document.forms[0]["name"].value;
+        var email = document.forms[0]["email"].value;
+        var password1 = document.forms[0]["password1"].value;
+        var password2 = document.forms[0]["password2"].value;
+
+        if (firstname == "" || name == "" || email == "" || password1 == "" || password2 == "") {
+            alert("Please fill in all required fields.");
+            return false;
+        }
+    }
+</script>
 </body>
 </html> 

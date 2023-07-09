@@ -63,8 +63,7 @@
                                         <p class="text-center small"></p>
                                     </div>
 
-                                    <form method="post" class="row g-3 needs-validation" novalidate>
-                                        {% csrf_token %}
+                                        
                                         {% if messages %}
                                             {% for message in messages %}
                                                 <div class="text-center text-danger pt-3">
@@ -74,16 +73,22 @@
                                         {% endif %}
 
                                         {% if otp1 %}
+                                        <form class="row contact_form" method="POST">
+                                            {% csrf_token %}
+                                             
                                             <div class="col-md-12 form-group p_star">
                                                 <input type="email" class="form-control" name="email" value="{{ usr.email }}" placeholder="Firstname" hidden>
                                             </div>
-                                            <div class="col-md-12 form-group p_star">
-                                                <input type="number" class="form-control" name="otp1" value="" placeholder="Enter Your OTP..!" required>
+                                            <div class="col-md-12 form-group">
+                                                <input type="number" class="form-control" name="otp1" required  placeholder="Enter Your OTP..!" >
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <button type="submit" value="submit" class="btn btn-block btn-primary">Submit</button>
+                                                <button type="submit"  class="btn btn-block btn-primary">Submit</button>
                                             </div>
+                                        </form>
                                         {% else %}
+                                        <form method="post" class="row g-3 needs-validation" novalidate>
+                                            {% csrf_token %}
                                             <div class="col-12">
                                                 <label for="yourName" class="form-label">Your Name</label>
                                                 <input type="text" name="first_name" class="form-control" id="yourName" required>

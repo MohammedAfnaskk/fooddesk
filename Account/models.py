@@ -6,4 +6,4 @@ from django.contrib.auth.models import User
 
 class UserOTP(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
-    otp=models.BigIntegerField()
+    otp=models.IntegerField()

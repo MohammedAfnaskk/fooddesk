@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from cart.models import Cart
 # Create your views here.
 
+# Apply Coupon
 def apply_coupon(request):
     if request.method == 'POST':
         coupon_code = request.POST.get('coupon_code')
@@ -48,7 +49,7 @@ def apply_coupon(request):
     return JsonResponse({'status': 'Invalid request'})
 
 
-
+# Admin Side Coupon
 def admincoupon(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -56,7 +57,8 @@ def admincoupon(request):
         'coupon' : Coupon.objects.all().order_by('-id')
     }
     return render (request,"Admin/coupon.html" ,context)
-            
+
+# Admin Add Coupon             
 def addcoupon(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -102,7 +104,7 @@ def addcoupon(request):
             messages.error(request, 'Invalid date format')
             return redirect('admincoupon')
         
-
+# Admin Edit Coupon
 def edicoupon(request,edit_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -161,6 +163,7 @@ def edicoupon(request,edit_id):
         coupon.save()
     return redirect('admincoupon')
 
+# Delete Coupon
 def deletecoupon(request,delete_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')

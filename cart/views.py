@@ -14,6 +14,7 @@ from django.http import HttpResponse, HttpRequest,HttpResponseRedirect
 from coupon.models  import *
  
 # Create your views here.
+# Cart Page
 @login_required(login_url='login')
 def cart(request):
     user = request.user
@@ -43,7 +44,7 @@ def cart(request):
     }
     return render(request, "shop/cart.html", context)
 
-
+# Add Cart
 def addtocart(request):
     if request.method  == 'POST':
         if request.user.is_authenticated:
@@ -66,7 +67,8 @@ def addtocart(request):
         else:
             return JsonResponse({'status': "Login to Continue"})
     return redirect('/')
- 
+
+ # Update Cart Price
 def update_cart(request):
     if request.method == 'POST':
         variation_id = request.POST.get('product_id')
@@ -91,7 +93,7 @@ def update_cart(request):
                 return JsonResponse({'status': 'Not quantity'})
     return JsonResponse('something went wrong, reload page',safe=False)
 
-
+# Delete Cart
 def removeFromCart(request, cart_id):
     if request.method == 'POST':
         delete_cart   = get_object_or_404(Cart, id=cart_id)
@@ -101,6 +103,7 @@ def removeFromCart(request, cart_id):
     else:
         return redirect('cart')
     
+# Checkout Page   
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='login')
 def checkout(request):
@@ -135,14 +138,9 @@ def checkout(request):
         'cart_count': cart_count
 
     }
- 
     return render(request, "shop/checkout.html", context)
 
-
-
- 
-
- 
+# Place Order
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='login')
 def place_order(request):
@@ -179,11 +177,7 @@ def place_order(request):
             usercoupon.delete()
         else:
             total = subtotal + tax
-
-        # new_order = Order(total_price=total_price)  # Assign total_price to new_order
-        # new_order.save()
-
-
+ 
         trackno = 'fooddesk' + str(random.randint(1111111, 9999999))
         while Order.objects.filter(tracking_no=trackno).exists():
             trackno = 'fooddesk' + str(random.randint(1111111, 9999999))
@@ -218,12 +212,10 @@ def place_order(request):
             return JsonResponse({'status' : "Yout order has been placed successfully"})
         # Clear user's cart
         cart_items.delete()
-
         messages.success(request, 'Your order has been placed successfully')
-        
-       
     return HttpResponseRedirect('checkout')
 
+# Razarpay Payment 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='login')
 def razarypaycheck(request):

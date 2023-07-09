@@ -27,7 +27,7 @@ import csv
 
 
 
-
+# Admin Dashboard
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='signin')
 def dashboard(request):
@@ -67,12 +67,12 @@ def dashboard(request):
     return render(request,'Admin/dashboard.html',context)
 
      
-
+# Admin Signout
 def signout(request):
    auth.logout(request)
    return redirect('signin')
  
-# user
+# User List 
 def userlist(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -91,7 +91,8 @@ def blockuser(request,user_id):
         user.is_active = True
         user.save()
     return redirect("userlist")
-#product
+
+# Product List
 def productlist(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -100,7 +101,7 @@ def productlist(request):
      }
     return render(request,"Admin/productlist.html",dict_list)
 
-# Add product
+# Add Product
 def addproduct(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -127,7 +128,8 @@ def addproduct(request):
         'category' : Category.objects.all()
     }
     return render(request,"Admin/addproduct.html",context) 
-# edit product
+
+# Edit Product
 def editproduct(request, prod_id):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -161,7 +163,7 @@ def editproduct(request, prod_id):
     }
     return render(request, 'Admin/editproduct.html',context)  
 
-# delete product
+# Delete Product
 def deleteproduct(request,prod_id):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -169,7 +171,8 @@ def deleteproduct(request,prod_id):
     prod.delete()
     messages.success(request,'Product Deleted successfully')
     return redirect('productlist')
- 
+
+# Order List
 def orderlist(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -180,7 +183,7 @@ def orderlist(request):
     return render(request, "Admin/vieworder.html", context)
 
  
-
+# Update Status
 def update_status(request, order_item_id):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -200,6 +203,7 @@ def category(request):
     }
     return render(request,"Admin/category.html",context)
 
+# Add Category
 def addcategory(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -214,8 +218,7 @@ def addcategory(request):
             return redirect('category')
         if not image:
             messages.error(request, 'Image not uploaded')
-            return redirect('category')
-        
+            return redirect('category')   
 # Save          
         slug = slugify(name)
 
@@ -227,7 +230,7 @@ def addcategory(request):
  
 
  
- 
+# Edit Category
 def editcategory(request, editcategory_id):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -259,14 +262,11 @@ def editcategory(request, editcategory_id):
         category_obj.category_name = name
         category_obj.category_description = description
         category_obj.save()
-        return HttpResponse("Category edited successfully")  # Example response
-
-        # Add any additional context data needed for the template
-        
+        return HttpResponse("Category edited successfully")  
     return render(request, 'Admin/editcategory.html',{'category': category_obj})
  
 
-    
+# Delete Category    
 def deletecategory(request,deletecategory_id):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -274,7 +274,7 @@ def deletecategory(request,deletecategory_id):
     categre.delete()
     return redirect('category')
 
-# Sales reprt
+# Sales Report
 def salesreport(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -303,21 +303,18 @@ def salesreport(request):
         else:
             messages.error(request, 'No data found')
     else:    
-         # Get the current month and year
+        # Get the current month and year
         current_date = datetime.date.today()
         current_month = current_date.month
         current_year = current_date.year   
      
-          # Get the start and end dates of the current month
+        # Get the start and end dates of the current month
         start_date = f'{current_year}-{current_month:02d}-01'
         end_date = current_date.strftime('%Y-%m-%d')
-
         
-            # Query the sales data for the current month
+        # Query the sales data for the current month
         order_items = OrderItem.objects.filter(order__created_at__date__gte=start_date, order__created_at__date__lte=end_date)
         
-
-
         if order_items:
             context.update(sales=order_items, s_date=start_date, e_date=end_date)
         else:
@@ -366,32 +363,12 @@ def salesreport(request):
         response = HttpResponse(buffer, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="sales_report.pdf"'
         return response
-    
-    #    # excel download
-    # if 'download' in request.GET:
-    #     sales = context.get('sales')
-    #     response = HttpResponse(content_type='text/csv')
-    #     response['Content-Disposition'] = 'attachment; filename="sales_report.csv"'
-
-    #     writer = csv.writer(response)
-    #     writer.writerow(['Order ID', 'Customer', 'Quantity', 'product', 'Price'])
-
-    #     for sale in sales :
-    #         writer.writerow([
-    #             sale.order.id,
-    #             sale.order.address.customer,
-    #             sale.quantity,
-    #             sale.product.product_name,
-    #             sale.order.total_price
-    #         ])
-    #     return response
-
     return render(request, 'Admin/salesreport.html', context)
 
 
 
 
-
+# Add Product Variant
 def addproduct_variant(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -455,6 +432,7 @@ def addproduct_variant(request):
     }
     return render(request, 'Admin/addproduct_variant.html', context)
 
+# Edit Variation
 def edit_variation(request, variation_id):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -537,6 +515,7 @@ def delete_variation(request, variation_id):
     messages.success(request,'Product Deleted successfully')
     return redirect('Product_Variant_list')
 
+# Product Variant List
 def Product_Variant_list(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -545,7 +524,7 @@ def Product_Variant_list(request):
     }
     return render(request, 'Admin/Variant_list.html', context)
 
-# offer
+# Admin Offer
 def adminoffer(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -555,7 +534,7 @@ def adminoffer(request):
 
     return render (request,'Admin/offer.html',context)
 
-
+# Add Offer
 def addoffer(request):
     if not request.user.is_superuser:
         return redirect('signin')
@@ -571,7 +550,8 @@ def addoffer(request):
         offer = Offer.objects.create(offer_name=ordername,discount_amount=discount)
         offer.save()
         return redirect('adminoffer')
-
+    
+# Edit Offer
 def editoffer(request,offer_id):
   if not request.user.is_superuser:
     return redirect('signin')
@@ -609,6 +589,7 @@ def editoffer(request,offer_id):
         messages.error(request, "The specified offer does not exist.")
         return redirect('adminoffer')
 
+# Delete Offer
 def deleteoffer(request,delete_id):
     if not request.user.is_superuser:
         return redirect('signin')
