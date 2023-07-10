@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Revenue <span>| This Month</span></h5>
+                  <h5 class="card-title">Revenue <span>| Today</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -92,7 +92,7 @@
             </div><!-- End Revenue Card -->
 
             <!-- Customers Card -->
-            <div class="col-xxl- col-xl-6">
+            <div class="col-xxl- col-xl-12">
 
               <div class="card info-card customers-card">
 
@@ -150,26 +150,32 @@
 
                   <!-- Line Chart -->
                   <div id="reportsChart"></div>
-
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
+                      const salesData = [{% for sale in sales_by_day %}{{ sale.total_sales|floatformat:2 }},{% endfor %}];
+                  
+                      const revenueData = salesData.map((sale) => {
+                        const revenue = sale * 0.35; // Assuming revenue is calculated as 30% of sales
+                        return parseFloat(revenue.toFixed(2));
+                      });
+                  
+                      const customersData = Array(salesData.length).fill({{ total_users }});
+                  
                       new ApexCharts(document.querySelector("#reportsChart"), {
-                        series: [{
-                          name: 'Sales',
-                          data: [{% for sale in sales_by_day %}
-                            {{ sale.total_sales|floatformat:2 }},
-                          {% endfor %}],
-                        }, {
-                          name: 'Revenue',
-                          data: [{% for sale in sales_by_day %}
-                            {{ revenue|floatformat:2 }},
-                          {% endfor %}],
-                        }, {
-                          name: 'Customers',
-                          data: [{% for sale in sales_by_day %}
-                            {{ total_users }},
-                          {% endfor %}],
-                        }],
+                        series: [
+                          {
+                            name: 'Sales',
+                            data: salesData,
+                          },
+                          {
+                            name: 'Revenue',
+                            data: revenueData,
+                          },
+                          {
+                            name: 'Customers',
+                            data: customersData,
+                          }
+                        ],
                         chart: {
                           height: 350,
                           type: 'area',
@@ -199,7 +205,11 @@
                         },
                         xaxis: {
                           type: 'datetime',
-                          categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                          categories: [
+                            {% for sale in sales_by_day %}
+                              '{{ sale.day|date:"Y-m-d" }}',
+                            {% endfor %}
+                          ],
                         },
                         tooltip: {
                           x: {
@@ -210,12 +220,13 @@
                     });
                   </script>
                   
+                  
                   <!-- End Line Chart -->
 
                 </div>
 
               </div>
-          </div><!-- End Reports -->
+            </div><!-- End Reports -->
 
        <!-- Recent Sales -->
        <div class="col-12">
@@ -263,7 +274,6 @@
 
           </div>
         </div>
-      </div>
     </section>
 
   </main><!-- End #main -->

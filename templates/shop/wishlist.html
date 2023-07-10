@@ -55,10 +55,11 @@
 								  {% csrf_token %}
 								  
 								  <td>
+									<i class="fas fa-shopping-cart cart-icon addToCartBtn "></i>
+
 									<input type="hidden" class="var_id" value="{{item.variation.id}}">
 									<input type="hidden" class="prod_id" value="{{item.variation.product_variant.id}}">
-									<i class="fas fa-shopping-cart cart-icon  addToCartBtn " ></i>
- 
+
  								  </td>
 								  
 								</tr><!-- END TR-->
@@ -132,7 +133,6 @@
     e.preventDefault();
 
 	var itemId = $(this).data('wish_id');
-	console.log(itemId,'daxo')
     $.ajax({
         method: "POST",
         url: "{%url 'delete_wishlist_item'%}",

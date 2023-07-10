@@ -39,7 +39,6 @@ def dashboard(request):
     revenue = 0
     for item in delivered_items:
         revenue += item.order.total_price
-    print(revenue)
     top_selling = OrderItem.objects.annotate(total_quantity=Sum('quantity')).order_by('-total_quantity').distinct()[:5]
 
     recent_sale = OrderItem.objects.all().order_by('-id')[:5]
