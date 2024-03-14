@@ -1,0 +1,14 @@
+asgiref          
+chardet           
+Django             
+django-mathfilters 
+numpy             
+pandas            
+pillow            
+pip                
+psycopg            
+psycopg2              
+python-decouple   
+python-slugify                    
+reportlab         
+ 

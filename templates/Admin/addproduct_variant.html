@@ -60,9 +60,9 @@
                 aria-label=".form-select-sm example"
                 name="size"
               >
-                {% for i in size%}
-                <option value="{{i.id}}">
-                  {{i.size}}
+                {% for size in size%}
+                <option value="{{size.id}}">
+                  {{size.get_size_display}}
                 </option>
                 {% endfor %}
               </select>
