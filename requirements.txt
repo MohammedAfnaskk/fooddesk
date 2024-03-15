@@ -5,9 +5,7 @@ django-mathfilters
 numpy             
 pandas            
 pillow            
-pip                
-psycopg            
-psycopg2              
+pip                             
 python-decouple   
 python-slugify                    
 reportlab         
