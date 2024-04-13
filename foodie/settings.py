@@ -148,8 +148,18 @@ MEDIA_URL = '/media/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'afnas9911@gmail.com'  # Enter your email address
-EMAIL_HOST_PASSWORD = 'exxp zyth zqed wrjf' # Enter your email password or app password
+EMAIL_HOST_USER = config('email'),   
+EMAIL_HOST_PASSWORD =config('emailpass'), 
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+AWS_ACCESS_KEY_ID =config('awss3key'),    
+AWS_SECRET_ACCESS_KEY =config('awss3access'),   
+AWS_STORAGE_BUCKET_NAME = 'fooddeskbucket'
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = 'eu-north-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL =  None
+AWS_S3_VERIFY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
